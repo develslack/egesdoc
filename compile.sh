@@ -19,8 +19,10 @@ gcc -Wall -g -std=gnu11  -o backend/bin/egesdoc \
     backend/src/system/system_struct.h backend/src/system/system_struct.c \
     backend/src/bussiness/users_service.h backend/src/bussiness/users_service.c \
     backend/src/bussiness/roles_service.h backend/src/bussiness/roles_service.c \
+    backend/src/bussiness/funciones_ejecutivas_service.h backend/src/bussiness/funciones_ejecutivas_service.c \
+    backend/src/bussiness/adicional_grado_service.h backend/src/bussiness/adicional_grado_service.c \
     backend/src/main.c \
-    -lpthread -lmysqlclient -lssl -lcrypto 2>&1 | tee comp_err.txt
+    -lm -lpthread -lmysqlclient -lssl -lcrypto 2>&1 | tee comp_err.txt
 
 if [ -f backend/bin/egesdoc ]; then
     clear

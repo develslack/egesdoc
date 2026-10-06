@@ -21,8 +21,8 @@ typedef struct{
 }FuncionesEjecutivas;
 
 FuncionesEjecutivas* newFuncionEjecutiva();
-void funcionesEjecutivas_init_cache(ArrayList* alistFuncionesEjecutivas);
-void FuncionesEjecutivas_load_storage(ArrayList* alistFuncionesEjecutivas);
+void funciones_ejecutivas_init_cache(ArrayList* alistFuncionesEjecutivas);
+void funciones_ejecutivas_load_storage(ArrayList* alistFuncionesEjecutivas);
 
 
 int funciones_ejecutivas_service_register(const char *body, char *error_msg, int error_size);

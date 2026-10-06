@@ -10,6 +10,8 @@
 #include "system/session_manager.h"
 #include "system/ArrayList.h"
 #include "bussiness/roles_service.h"
+#include "bussiness/funciones_ejecutivas_service.h"
+#include "bussiness/adicional_grado_service.h"
 
 
 
@@ -43,6 +45,15 @@ int main() {
     //roles_init_cache(alist_roles);
     //roles_load_storage(alist_roles);
 
+    // FUNCIONES EJECUTIVAS
+    ArrayList* alist_funciones_ejecutivas = al_newArrayList();
+    funciones_ejecutivas_init_cache(alist_funciones_ejecutivas);
+    funciones_ejecutivas_load_storage(alist_funciones_ejecutivas);
+
+    // ADICIONAL GRADO
+    ArrayList* alist_adicional_grado = al_newArrayList();
+    adicional_grado_init_cache(alist_adicional_grado);
+    adicional_grado_load_storage(alist_adicional_grado);
 
 
 

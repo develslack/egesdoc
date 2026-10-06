@@ -1,0 +1,38 @@
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <strong>Funciones Ejecutivas</strong>
+            </div>
+        </div><hr>
+           <button type="button" class="btn btn-success btn-sm" id="add-funcion_ejecutiva-form">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Añadir Función Ejecutiva
+           </button><hr>
+
+
+                <table class='display compact' style='width:100%' id='funcionesEjecutivasTable'>
+                    <thead>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Nivel</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Cantidad UR</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Valor UR</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Monto</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Norma Regulatoria</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Entrada Vigencia</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Mes</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Año</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-warning'>Acciones</span></th>
+                    </thead>
+
+                        <tbody id="funcionesEjecutivasTableBody"></tbody>
+
+
+                    </table>
+                    <hr>
+
+                    <div id="alert-info-funciones_ejecutivas"></div>
+
+    </div>
+</div>
+
+<div id="contenedor-modal-maestro-funciones_ejecutivas"></div>

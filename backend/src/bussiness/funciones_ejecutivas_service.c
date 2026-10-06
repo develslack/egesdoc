@@ -146,7 +146,7 @@ static int sp_editar_funcion_ejecutiva(int id, const char* nivel, const char* ca
     bind_param[6].buffer_length = strlen(f_entrada_vigencia);
 
     bind_param[7].buffer_type = MYSQL_TYPE_STRING;
-    bind_param[8].buffer = (char *)mes;
+    bind_param[7].buffer = (char *)mes;
     bind_param[7].buffer_length = strlen(mes);
 
     bind_param[8].buffer_type = MYSQL_TYPE_STRING;
@@ -388,6 +388,8 @@ int funciones_ejecutivas_service_edit(const char *body, char *error_msg, int err
     char anio[5];
     char d_anio[5];
 
+    get_funcion_ejecutiva_value(body,"id", nivel, sizeof(id_str));
+
     get_funcion_ejecutiva_value(body,"nivel", nivel, sizeof(nivel));
     url_decode(d_nivel, nivel);
 
@@ -603,3 +605,31 @@ static void route_get_funciones_ejecutivas_list(int client, const char *body) {
 
 
 } // END OF FUNCTION
+
+
+// ===================================================================================================================================== //
+// ROUTE OR GET ONE REGESTRY
+// ===================================================================================================================================== //
+static void route_get_funciones_ejecutivas_by_id(int client, const char *body) {
+
+    char response_json[1024];
+
+    if (get_funcion_ejecutiva_service_id(body, response_json, sizeof(response_json))) {
+        send_response(client, "200 OK", "application/json", response_json);
+    } else {
+        send_response(client, "404 Not Found", "application/json", response_json);
+    }
+
+} //END OF FUNCTION
+
+
+// ===================================================================================================================================== //
+// INIT ALL ROUTES FUNCIONES EJECUTIVAS
+// ===================================================================================================================================== //
+void init_funciones_ejecutivas_routes() {
+
+    add_route("GET", "/funciones_ejecutivas/list", route_get_funciones_ejecutivas_list); // endpoint para listar
+    add_route("POST", "/funciones_ejecutivas/add", route_post_funciones_ejecutivas); // endpoint para alta de nuevo registro
+    add_route("POST", "/funciones_ejecutivas/edit", route_post_funciones_ejecutivas_edit); // endpoint para editar un registro
+    add_route("POST", "/funciones_ejecutivas/get", route_get_funciones_ejecutivas_by_id); // endpoint para consultar un registro por ID
+}

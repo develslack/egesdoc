@@ -64,15 +64,28 @@ document.addEventListener("DOMContentLoaded", () => {
                             <li class="active"><a href="#" id="link-home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Sistema <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                <li><a href="#" id="link-usuarios" data-toggle="tooltip" title="Usuarios">
-                                    <span class="glyphicon glyphicon-user"></span> Usuarios</a></li>
-                                <li><a href="#" id="link-documentacion_tecnica" data-toggle="tooltip" title="Listar Documentación Técnica">
-                                    <span class="glyphicon glyphicon-book"></span> Documentación Técnica</a></li>
-                                <li><a href="#" id="link-tablas_maestro" data-toggle="tooltip" title="Listar Tablas Maestro">
-                                    <span class="glyphicon glyphicon-th-list"></span> Tablas Maestro</a></li>
+                                    <li><a href="#" id="link-usuarios" data-toggle="tooltip" title="Usuarios">
+                                        <span class="glyphicon glyphicon-user"></span> Usuarios</a></li>
+                                    <li><a href="#" id="link-documentacion_tecnica" data-toggle="tooltip" title="Listar Documentación Técnica">
+                                        <span class="glyphicon glyphicon-book"></span> Documentación Técnica</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">Page 2</a></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-th-list"></span> Tablas Maestro
+                                <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="link-funciones_ejecutivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Funciones Ejecutivas</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Adicional Grado</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Representación</a></li>
+                                </ul>
+                            </li>
+
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -221,9 +234,9 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/home.html");
   });
 
-  document.getElementById("link-generos")?.addEventListener("click", (e) => {
+  document.getElementById("link-funciones_ejecutivas")?.addEventListener("click", (e) => {
     e.preventDefault();
-    loadDashboardView(window.VIEWS_PATH + "/generos/generos.html");
+    loadDashboardView(window.VIEWS_PATH + "/funciones_ejecutivas/funciones_ejecutivas.html");
   });
 
   // ======================================================================================================================== //
@@ -284,6 +297,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("roles")) {
         loadDashboardScript(window.VIEWS_PATH + "/js/roles.js");
+      }
+      else if (viewPath.includes("funciones_ejecutivas")) {
+        loadDashboardScript(window.VIEWS_PATH + "/funciones_ejecutivas/funciones_ejecutivas.js");
       }
 
 
