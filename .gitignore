@@ -1,0 +1,4 @@
+backend/actas_comision/*
+backend/documentos/*
+backend/uploads/*
+queries/dumps/*

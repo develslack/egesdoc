@@ -1,0 +1,410 @@
+# ================================================================================================ #
+
+# email data
+@name: Administrador
+@apellido: Mecon
+#user: gesdo.app@gmail.com
+#pass: proteo*310*311*
+
+# ================================================================================================ #
+
+#crear nuevo usuario y luego cambiar datos en archivo connection.php
+CREATE USER 'gesdoju'@'localhost' IDENTIFIED BY 'gesdoju';
+GRANT ALL PRIVILEGES ON gesdoju . * TO 'gesdoju'@'localhost';
+FLUSH PRIVILEGES;
+
+# ================================================================================================ #
+
+#tabla usuarios
+create table usuarios (
+id int(11) auto_increment primary key, 
+nombre varchar(30) binary not null, 
+user varchar(15) binary not null, 
+password varchar(15) binary not null, 
+email varchar(90) not null, 
+rol_id int(1) default 1 not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+select * from usuarios;
+
+
+
+# ================================================================================================ #
+
+#tabla usuarios para el explorador de archivos
+create table usuarios_explorer (
+id int(11) auto_increment primary key, 
+nombre varchar(30) binary not null, 
+user varchar(15) binary not null, 
+password varchar(15) binary not null, 
+email varchar(90) not null, 
+role int(1) default 1 not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# ================================================================================================ #
+
+#tabla normas
+create table normas (
+id int(11) auto_increment primary key,
+nombre_norma varchar(140) not null,
+n_norma varchar(100) not null, 
+tipo_norma varchar(11) not null,
+f_norma varchar(9) not null, 
+f_pub date not null, 
+anio_pub varchar(4) not null,
+jurisdiccion varchar(100),
+organismo varchar(100),
+unidad_fisica varchar(10) not null,
+observaciones varchar(300), 
+file_name varchar(100), 
+file_path varchar(100)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# ================================================================================================ #
+
+# change to fulltext for make search
+# para saber como fue creada la tabla ejecutar
+SHOW CREATE TABLE normas
+# para eliminar un index determinada ejecutar
+alter table normas drop index observaciones;
+# para determinar varias columnas de busquedas
+ALTER TABLE normas ADD FULLTEXT index_combinado (nombre_norma,f_norma,observaciones);
+
+# ================================================================================================ #
+
+#tabla autoridades_superiores
+create table autoridades_superiores (
+id int(11) auto_increment primary key,
+anio varchar(4) not null,
+mes varchar(10) not null, 
+jurisdiccion varchar(120) not null,
+apellido_nombre varchar(100) not null,
+cargo varchar(90) not null,
+asignacion_mensual float(8,2) not null,
+desarragaigo float(8,2),
+sac float(8,2),
+otros_conceptos float(8,2),
+observaciones varchar(300) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# ================================================================================================ #
+
+
+#tabla jurisdicciones
+create table jurisdicciones(
+id int(11) auto_increment primary key, 
+cod_jur varchar(2) not null,
+descripcion varchar(90) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+#tabla funciones Ejecutivas
+create table funciones_ejecutivas(
+id int(11) auto_increment primary key, 
+nivel varchar(1) not null,
+cant_ur int(11) not null,
+valor_ur float(8,2) not null,
+monto float(8,2) not null,
+norma_regulatoria varchar(100) not null,
+f_entrada_vigencia date not null,
+mes varchar(10) not null,
+anio varchar(4) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# ================================================================================================ #
+
+#tabla escala salarial sinep
+create table escalas_sinep_pp (
+id int(11) auto_increment primary key,
+norma_reguladora varchar(100) not null,
+f_vigencia date not null,
+mes varchar(10) not null,
+anio varchar(4) not null,
+valor_ur float(8,2) not null,
+nivel varchar(1) not null,
+grado varchar(2) not null,
+agrupamiento varchar(18) not null,
+sueldo_ur int(11) not null,
+sueldo_monto float(8,2) not null,
+dedicacion_funcional_ur int(11) not null,
+dedicacion_funcional_monto float(8,2) not null,
+asignacion_basica_ur int(11) not null,
+asignacion_basica_monto float(8,2) not null,
+basico_conformado_ur int(11) not null,
+basico_conformado_monto float(8,2) not null,
+adicional_grado_ur int(11) not null,
+adicional_grado_monto float(8,2) not null,
+suplemento_agrup_porcentaje int(11) not null,
+suplemento_agrup_monto float(8,2) not null,
+tramo_porcentaje int(11) not null,
+tramo_suma float(8,2) not null,
+monto_total float(8,2) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+#tabla adicional grado UR
+create table adicional_grado_ur(
+id int(11) auto_increment primary key,
+nivel varchar(1) not null,
+grado varchar(2) not null,
+cant_ur int(11) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+#tabla unidades retributivas
+create table unidades_retributivas(
+id int(11) auto_increment primary key,
+nivel varchar(1) not null,
+grado varchar(2) not null,
+sueldo_ur int(11) not null,
+dedicacion_funcional_ur int(11) not null,
+total_ur int(11) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla tipo organismos
+create table tipo_organismo(
+id int(11) auto_increment primary key,
+cod_organismo varchar(2) not null,
+descripcion varchar(120) not null,
+ubicacion_fisica varchar(120) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla segmentacion_tematica
+create table segmentacion_tematica(
+id int(11) auto_increment primary key,
+clas_inst varchar(2) not null,
+jurisdiccion varchar(2) not null,
+saf varchar(3) not null,
+cod_sirhu varchar(2) not null,
+cod_org varchar(2) not null,
+reg_paritario varchar(100),
+reg_laboral varchar(100),
+esc_estatuto varchar(100),
+convenio varchar(100),
+ubicacion_fisica varchar(50)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+#subir csv segmentacion_tematica
+load data local infile '/mnt/sdb1/Documents/Proyecto_Gesdoju/segmentacion_tematica.csv' 
+into table segmentacion_tematica fields terminated by ',' enclosed by '"' lines terminated by '\n' ignore 1 lines
+(clas_inst,jurisdiccion,saf,cod_sirhu,cod_org,reg_paritario,reg_laboral,esc_estatuto,convenio,ubicacion_fisica);
+
+
+# ================================================================================================ #
+
+
+#TABLA REPRESENTANTES
+create table representantes(
+id int(11) auto_increment primary key,
+nombre_representante varchar(100) not null,
+dni_representante varchar(10) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#TABLA GRUPOS REPRESENTANTES
+create table grupo_representantes(
+id int(11) auto_increment primary key,
+nombre_grupo varchar(100) not null,
+representante_titular varchar(100) not null,
+representante_suplente varchar(100) not null,
+primer_asesor varchar(100),
+segundo_asesor varchar(100),
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#TABLA REPRESENTACION PARITARIAS
+create table representacion_paritarias(
+id int(11) auto_increment primary key,
+grupo_representantes varchar(70) not null,
+tipo_representacion enum('Negociacion','Interpretacion') not null,
+organismo varchar(150) not null,
+fecha_reunion date not null,
+file_name varchar(400),
+file_path varchar(400),
+resumen_reunion text
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# change to fulltext for make search
+ALTER TABLE representacion_paritarias ADD FULLTEXT (resumen_reunion);
+
+# ================================================================================================ #
+
+#tipo de norma
+create table tipo_norma(
+id int(11) auto_increment primary key,
+descripcion varchar(100) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla ambito de la norma
+create table ambito_norma(
+id int(11) auto_increment primary key,
+descripcion varchar(100) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla normas vinculadas
+create table normas_vinculadas(
+id int(11) auto_increment primary key,
+id_norma_principal int(11) not null,
+path_name varchar(100) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla eventos
+CREATE TABLE events(
+  id int(11) auto_increment primary key,
+  title varchar(255) NOT NULL,
+  color varchar(7) DEFAULT NULL,
+  start datetime NOT NULL,
+  end datetime DEFAULT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO events (id, title, color, start, end) VALUES (1, 'Evento Azul', '#0071c5', '2017-08-01 00:00:00', '2017-08-02 00:00:00'),(2, 'Eventos 2', '#40E0D0', '2017-08-02 00:00:00', '2017-08-03 00:00:00'),(3, 'Doble click para editar evento', '#008000', '2017-08-03 00:00:00', '2017-08-07 00:00:00');
+
+# ================================================================================================ #
+
+
+#tabla tipo_representacion
+create table tipo_representacion(
+id int(11) auto_increment primary key,
+descripcion varchar(100) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla avances_paritaria
+create table avances_paritaria (
+id int(11) auto_increment primary key,
+paritaria_id int(11) not null,
+organismo varchar(100) not null,
+tipo_representacion varchar(100) not null,
+grupo varchar(100) not null,
+fecha_reunion date not null,
+resumen varchar(5000) not null,
+files_path varchar(300)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla requerimientos
+create table requerimientos (
+id int(11) auto_increment primary key,
+tipo_solicitud varchar(100) not null,
+descripcion_modulo varchar(100) not null,
+descripcion_requerimiento varchar(2000) not null,
+fecha_solicitud date not null,
+usuario_solicitante varchar(100),
+usuario_desarrollador varchar(100),
+descripcion_avance varchar(2000),
+fecha_avance date,
+estado_requerimiento varchar(100)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#tabla mail_properties
+create table mail_properties(
+id int(11) auto_increment primary key,
+email varchar(35) not null,
+password varchar(15) not null,
+provider varchar(20) not null,
+client_id varchar(200) not null,
+secret_client varchar(200) not null,
+refresh_token varchar(200) not null,
+host varchar(20) not null,
+host_port varchar(3) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# ===============================================================================================#
+
+
+
+#subir csv unidades retributivas
+load data local infile '/mnt/sdb4/server/htdocs/gesdoju/sqls/unidades_retributivas.csv' 
+into table unidades_retributivas fields terminated by ',' enclosed by '"' lines terminated by '\n'
+(nivel,grado,sueldo_ur,dedicacion_funcional_ur,total_ur);
+
+
+# ================================================================================================ #
+
+
+#subir csv jurisdicciones
+load data local infile '/var/www/html/gesdoju/sqls/jurisdiccion.csv' 
+into table jurisdiccion fields terminated by ',' enclosed by '"' lines terminated by '\n'
+(cod_jur,descripcion);
+
+
+# ================================================================================================ #
+
+
+#tabla organismos
+create table organismos(
+id int(11) auto_increment primary key, 
+cod_org varchar(2) not null,
+descripcion varchar(90) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# ================================================================================================ #
+
+
+#subir csv organismos
+load data local infile '/var/www/html/gesdoju/sqls/organismos.csv' 
+into table organismos fields terminated by ',' enclosed by '"' lines terminated by '\n'
+(cod_org,descripcion);
+
+
+# ================================================================================================ #
+
+
+#subir csv normas
+load data local infile '/mnt/sdb1/Documents/Proyecto_Gesdoju/file.csv' 
+into table normas fields terminated by ',' enclosed by '"' lines terminated by '\n'
+(nombre_norma,n_norma,tipo_norma,f_norma,f_pub,anio_pub,jurisdiccion,organismo,unidad_fisica,observaciones);
+
+
+# ================================================================================================ #
