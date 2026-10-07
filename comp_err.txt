@@ -18,11 +18,11 @@ backend/src/system/users.h:9:13: aviso: ‘route_get_register’ se declaró ‘
 backend/src/system/users.h:10:13: aviso: ‘route_post_register’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    10 | static void route_post_register(int client, const char *body);
       |             ^~~~~~~~~~~~~~~~~~~
-En el fichero incluido desde backend/src/system/routes.c:14:
+En el fichero incluido desde backend/src/system/routes.c:15:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    24 | static void trim_string(char *str);
       |             ^~~~~~~~~~~
-En el fichero incluido desde backend/src/system/routes.c:14:
+En el fichero incluido desde backend/src/system/routes.c:15:
 backend/src/system/session_manager.h:52:13: aviso: ‘route_post_set_session_context’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    52 | static void route_post_set_session_context(int client, const char* body);
       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,6 +83,13 @@ backend/src/bussiness/users_service.c:441:14: aviso: se define ‘json_escape’
 backend/src/bussiness/users_service.c:426:13: aviso: se define ‘append_str’ pero no se usa [-Wunused-function]
   426 | static void append_str(char **dest, size_t *size, const char *src) {
       |             ^~~~~~~~~~
+backend/src/bussiness/unidades_retributivas_service.c: En la función ‘sp_editar_unidades_retributivas’:
+backend/src/bussiness/unidades_retributivas_service.c:94:9: aviso: variable ‘nuevo_id’ sin usar [-Wunused-variable]
+   94 |     int nuevo_id = 0;
+      |         ^~~~~~~~
+backend/src/bussiness/unidades_retributivas_service.c:93:16: aviso: variable ‘bind_result’ sin usar [-Wunused-variable]
+   93 |     MYSQL_BIND bind_result[1];
+      |                ^~~~~~~~~~~
 En el fichero incluido desde backend/src/main.c:10:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    24 | static void trim_string(char *str);

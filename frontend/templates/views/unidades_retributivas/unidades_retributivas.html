@@ -1,0 +1,35 @@
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <strong>Unidades Retributivas</strong>
+            </div>
+        </div><hr>
+           <button type="button" class="btn btn-success btn-sm" id="add-unidad_retributiva-form">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Añadir Unidad Retributiva
+           </button><hr>
+
+
+                <table class='display compact' style='width:100%' id='unidadesRetributivasTable'>
+                    <thead>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Nivel</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Grado</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Sueldo UR</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Dedicación Funcional UR</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Total UR</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-warning'>Acciones</span></th>
+                    </thead>
+
+                        <tbody id="unidadesRetributivasTableBody"></tbody>
+
+
+                    </table>
+                    <hr>
+
+                    <div id="alert-info-unidades_retributivas"></div>
+
+    </div>
+</div>
+
+<div id="contenedor-modal-maestro-unidades_retributivas"></div>

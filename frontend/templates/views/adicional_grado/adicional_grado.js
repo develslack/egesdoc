@@ -1,5 +1,5 @@
 console.clear();
-console.log("✅ Módulo Funciones Ejecutivas Iniciado de forma nativa.");
+console.log("✅ Módulo Adicional Grado Iniciado de forma nativa.");
 
 // CORRECCIÓN: Usamos el objeto window para evitar el SyntaxError de redeteclaración con let
 window.dTable = window.dTable || null;
@@ -9,11 +9,11 @@ window.dTable = window.dTable || null;
     // ================================================================================================================= //
     // 1. CARGA DE LA TABLA MAESTRA DESDE EL BACKEND EN C
     // ================================================================================================================= //
-    const response = await fetch(window.API_BASE_URL +"/funciones_ejecutivas/list");
+    const response = await fetch(window.API_BASE_URL +"/adicional_grado/list");
     const registros = await response.json();
 
-    const tableBody = document.getElementById("funcionesEjecutivasTableBody");
-    const alertInfo = document.getElementById("alert-info-funciones_ejecutivas");
+    const tableBody = document.getElementById("adicionalGradoTableBody");
+    const alertInfo = document.getElementById("alert-info-adicional_grado");
     tableBody.innerHTML = "";
 
     let count = 0;
@@ -22,24 +22,14 @@ window.dTable = window.dTable || null;
       const row = document.createElement("tr");
       row.innerHTML = `
         <td class="text-center">${reg.nivel}</td>
+        <td class="text-center">${reg.grado}</td>
         <td class="text-center">${reg.cant_ur}</td>
-        <td class="text-center">$${reg.valor_ur}</td>
-        <td class="text-center">$${reg.monto}</td>
-        <td class="text-center">${reg.norma_regulatoria}</td>
-        <td class="text-center">${reg.f_entrada_vigencia}</td>
-        <td class="text-center">${reg.mes}</td>
-        <td class="text-center">${reg.anio}</td>
         <td class="text-center">
-          <button class="btn btn-default btn-sm btn-editar-funcion_ejecutiva"
+          <button class="btn btn-default btn-sm btn-editar-adicional_grado"
                   data-id="${reg.id}"
                   data-nivel="${reg.nivel}"
-                  data-cant_ur="${reg.cant_ur}"
-                  data-valor_ur="${reg.valor_ur}"
-                  data-monto="${reg.monto}"
-                  data-norma_regulatoria="${reg.norma_regulatoria}"
-                  data-f_entrada_vigencia="${reg.f_entrada_vigencia}"
-                  data-mes="${reg.mes}"
-                  data-anio="${reg.anio}">
+                  data-grado="${reg.grado}"
+                  data-cant_ur="${reg.cant_ur}">
             <span class="glyphicon glyphicon-edit"></span> Editar
           </button>
         </td>`;
@@ -54,11 +44,11 @@ window.dTable = window.dTable || null;
                                </div><hr>`;
     }
 
-    if ($.fn.DataTable.isDataTable("#funcionesEjecutivasTable")) {
-      $("#funcionesEjecutivasTable").DataTable().destroy();
+    if ($.fn.DataTable.isDataTable("#adicionalGradoTable")) {
+      $("#adicionalGradoTable").DataTable().destroy();
     }
 
-    dTable = $('#funcionesEjecutivasTable').DataTable({
+    dTable = $('#adicionalGradoTable').DataTable({
         "order": [[0, "asc"]],
         "responsive":     true,
         "scrollY":        "300px",
@@ -96,9 +86,9 @@ window.dTable = window.dTable || null;
     // 2. PREPARACIÓN DEL MODAL USANDO EL SISTEMA DEL DASHBOARD
     // ================================================================================================================= //
     // Usamos el fetch nativo del servidor para rellenar el div de abajo sin pisar el dashboard central
-    const contenedorModal = document.getElementById("contenedor-modal-maestro-funciones_ejecutivas");
+    const contenedorModal = document.getElementById("contenedor-modal-maestro-adicional_grado");
     if (contenedorModal) {
-        const respModal = await fetch(window.VIEWS_PATH + "/funciones_ejecutivas/nueva_funcion_ejecutiva.html");
+        const respModal = await fetch(window.VIEWS_PATH + "/adicional_grado/nuevo_adicional_grado.html");
         contenedorModal.innerHTML = await respModal.text();
     }
 
@@ -107,30 +97,25 @@ window.dTable = window.dTable || null;
     // ================================================================================================================= //
 
     // Evento Añadir (Alta)
-    $(document).off("click", "#add-funcion_ejecutiva-form").on("click", "#add-funcion_ejecutiva-form", function(e) {
+    $(document).off("click", "#add-adicional_grado-form").on("click", "#add-adicional_grado-form", function(e) {
         e.preventDefault();
         prepararYMostrarModal("alta");
     });
 
     // Evento Editar (Fila de la tabla)
-    $(document).off("click", ".btn-editar-funcion_ejecutiva").on("click", ".btn-editar-funcion_ejecutiva", function(e) {
+    $(document).off("click", ".btn-editar-adicional_grado").on("click", ".btn-editar-adicional_grado", function(e) {
         e.preventDefault();
         const datos = {
             id: $(this).attr("data-id"),
             nivel: $(this).attr("data-nivel"),
-            cant_ur: $(this).attr("data-cant_ur"),
-            valor_ur: $(this).attr("data-valor_ur"),
-            monto: $(this).attr("data-monto"),
-            norma_regulatoria: $(this).attr("data-norma_regulatoria"),
-            f_entrada_vigencia: $(this).attr("data-f_entrada_vigencia"),
-            mes: $(this).attr("data-mes"),
-            anio: $(this).attr("data-anio")
+            grado: $(this).attr("data-grado"),
+            cant_ur: $(this).attr("data-cant_ur")
         };
         prepararYMostrarModal("edicion", datos);
     });
 
   } catch (error) {
-    console.error("💥 Error general en el módulo Funciones Ejecutivas:", error);
+    console.error("💥 Error general en el módulo Adicional Grado:", error);
   }
 })();
 
@@ -138,49 +123,28 @@ window.dTable = window.dTable || null;
 // FUNCIÓN QUE CONSTRUYE EL FORMULARIO INTERNO Y MUESTRA EL MODAL FLOTANTE
 // ===================================================================================================================== //
 function prepararYMostrarModal(modo, datos = null) {
-    const $modal =$("#myModal-funciones_ejecutivas");
+    const $modal =$("#myModal-adicional_grado");
     if ($modal.length === 0) return;
 
     // Seteamos título del modal flotante
-    $modal.find(".modal-title").text(modo === "alta" ? "Añadir Función Ejecutiva" : "Editar Función Ejecutiva");
+    $modal.find(".modal-title").text(modo === "alta" ? "Añadir Adicional Grado" : "Editar Adicional Grado");
 
     // Seteamos campos en el body vacío
     $modal.find(".modal-body").html(`
 
-        <form id="form-modal-funcion_ejecutiva">
-            <input type="hidden" id="modal-funcion_ejecutiva-id" value="${datos ? datos.id : ''}">
+        <form id="form-modal-adicional_grado">
+            <input type="hidden" id="modal-adicional_grado-id" value="${datos ? datos.id : ''}">
             <div class="form-group">
                 <label>Nivel:</label>
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-nivel" value="${datos ? datos.nivel : ''}" required>
+                <input type="text" class="form-control" id="modal-adicional_grado-nivel" value="${datos ? datos.nivel : ''}" required>
+            </div>
+            <div class="form-group">
+                <label>Grado:</label>
+                <input type="text" class="form-control" id="modal-adicional_grado-grado" value="${datos ? datos.grado : ''}" required>
             </div>
             <div class="form-group">
                 <label>Cantidad UR:</label>
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-cant_ur" value="${datos ? datos.cant_ur : ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Valor UR:</label>
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-valor_ur" value="${datos ? datos.valor_ur : ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Monto:</label>
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-monto" value="${datos ? datos.monto : ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Norma Regulatoria:</label>
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-norma_regulatoria" value="${datos ? datos.norma_regulatoria : ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Fecha Entrada Vigencia:</label>
-                <input type="date" class="form-control" id="modal-funcion_ejecutiva-f_entrada_vigencia" value="${datos ? datos.f_entrada_vigencia : ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Mes:</label>
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-mes" value="${datos ? datos.mes : ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Año:</label>
-                <!-- CORRECCIÓN APLICADA: id cambiado a "anio" -->
-                <input type="text" class="form-control" id="modal-funcion_ejecutiva-anio" value="${datos ? datos.anio : ''}" required>
+                <input type="text" class="form-control" id="modal-adicional_grado-cant_ur" value="${datos ? datos.cant_ur : ''}" required>
             </div>
             <button type="submit" id="btn-submit-oculto" style="display:none;"></button>
         </form>
@@ -201,19 +165,6 @@ function prepararYMostrarModal(modo, datos = null) {
     $modal.modal("show");
 
     // =========================================================================
-    // NUEVO CÓDIGO: CÁLCULO AUTOMÁTICO DE MONTO
-    // =========================================================================
-    const inputCantUr = document.getElementById("modal-funcion_ejecutiva-cant_ur");
-    const inputValorUr = document.getElementById("modal-funcion_ejecutiva-valor_ur");
-    const inputMonto = document.getElementById("modal-funcion_ejecutiva-monto");
-
-    inputMonto.addEventListener("focus", function() {
-        const cant = parseFloat(inputCantUr.value.replace(',', '.')) || 0;
-        const valor = parseFloat(inputValorUr.value.replace(',', '.')) || 0;
-        const resultado = (cant * valor).toFixed(2);
-        this.value = resultado;
-    });
-    // =========================================================================
 
     // Vinculamos el botón verde del footer con la validación del form
     document.getElementById("btn-modal-guardar").onclick = () => {
@@ -221,32 +172,29 @@ function prepararYMostrarModal(modo, datos = null) {
     };
 
     // Procesamiento del submit al backend en C
-    document.getElementById("form-modal-funcion_ejecutiva").onsubmit = async (e) => {
+    document.getElementById("form-modal-adicional_grado").onsubmit = async (e) => {
         e.preventDefault();
 
         const statusContainer = document.getElementById("modal-status-message");
-        const id = document.getElementById("modal-funcion_ejecutiva-id").value;
+        const id = document.getElementById("modal-adicional_grado-id").value;
 
         const payload = {
-            nivel: document.getElementById("modal-funcion_ejecutiva-nivel").value,
-            cant_ur: document.getElementById("modal-funcion_ejecutiva-cant_ur").value,
-            valor_ur: document.getElementById("modal-funcion_ejecutiva-valor_ur").value,
-            monto: document.getElementById("modal-funcion_ejecutiva-monto").value,
-            norma_regulatoria: document.getElementById("modal-funcion_ejecutiva-norma_regulatoria").value,
-            f_entrada_vigencia: document.getElementById("modal-funcion_ejecutiva-f_entrada_vigencia").value,
-            mes: document.getElementById("modal-funcion_ejecutiva-mes").value,
-            anio: document.getElementById("modal-funcion_ejecutiva-anio").value
+            nivel: document.getElementById("modal-adicional_grado-nivel").value,
+            grado: document.getElementById("modal-adicional_grado-grado").value,
+            cant_ur: document.getElementById("modal-adicional_grado-cant_ur").value
         };
+
+        console.log(id);
 
         if(id == ""){
 
             statusContainer.innerHTML = `<span class="text-info">⏳ Procesando solicitud...</span>`;
 
             try {
-                const enviorresp = await fetch(window.API_BASE_URL +"/funciones_ejecutivas/add", {
+                const enviorresp = await fetch(window.API_BASE_URL +"/adicional_grado/add", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: `nivel=${encodeURIComponent(payload.nivel)}&cant_ur=${encodeURIComponent(payload.cant_ur)}&valor_ur=${encodeURIComponent(payload.valor_ur)}&monto=${encodeURIComponent(payload.monto)}&norma_regulatoria=${encodeURIComponent(payload.norma_regulatoria)}&f_entrada_vigencia=${encodeURIComponent(payload.f_entrada_vigencia)}&mes=${encodeURIComponent(payload.mes)}&anio=${encodeURIComponent(payload.anio)}`
+                    body: `nivel=${encodeURIComponent(payload.nivel)}&grado=${encodeURIComponent(payload.grado)}&cant_ur=${encodeURIComponent(payload.cant_ur)}`
                 });
 
                 const data = await enviorresp.json();
@@ -257,7 +205,7 @@ function prepararYMostrarModal(modo, datos = null) {
                     // Forzamos la actualización de la vista actual llamando al dashboard de forma nativa
                     setTimeout(() => {
                         $modal.modal("hide");
-                        window.loadDashboardView(window.VIEWS_PATH + "/funciones_ejecutivas/funciones_ejecutivas.html");
+                        window.loadDashboardView(window.VIEWS_PATH + "/adicional_grado/adicional_grado.html");
                     }, 1200);
                 } else {
                     statusContainer.innerHTML = `<span class="text-danger"><strong>❌ Error:</strong> ${data.message}.</span>`;
@@ -269,16 +217,19 @@ function prepararYMostrarModal(modo, datos = null) {
             }
 
         }
+
+        console.log(id);
+
         if(id != ""){
 
-
+            console.log(payload);
             statusContainer.innerHTML = `<span class="text-info">⏳ Procesando solicitud...</span>`;
 
             try {
-                const enviorresp = await fetch(window.API_BASE_URL +"/funciones_ejecutivas/edit", {
+                const enviorresp = await fetch(window.API_BASE_URL +"/adicional_grado/edit", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: `id=${encodeURIComponent(id)}&nivel=${encodeURIComponent(payload.nivel)}&cant_ur=${encodeURIComponent(payload.cant_ur)}&valor_ur=${encodeURIComponent(payload.valor_ur)}&monto=${encodeURIComponent(payload.monto)}&norma_regulatoria=${encodeURIComponent(payload.norma_regulatoria)}&f_entrada_vigencia=${encodeURIComponent(payload.f_entrada_vigencia)}&mes=${encodeURIComponent(payload.mes)}&anio=${encodeURIComponent(payload.anio)}`
+                    body: `id=${encodeURIComponent(id)}&nivel=${encodeURIComponent(payload.nivel)}&grado=${encodeURIComponent(payload.grado)}&cant_ur=${encodeURIComponent(payload.cant_ur)}`
                 });
 
                 const data = await enviorresp.json();
@@ -289,7 +240,7 @@ function prepararYMostrarModal(modo, datos = null) {
                     // Forzamos la actualización de la vista actual llamando al dashboard de forma nativa
                     setTimeout(() => {
                         $modal.modal("hide");
-                        window.loadDashboardView(window.VIEWS_PATH + "/funciones_ejecutivas/funciones_ejecutivas.html");
+                        window.loadDashboardView(window.VIEWS_PATH + "/adicional_grado/adicional_grado.html");
                     }, 1200);
                 } else {
                     statusContainer.innerHTML = `<span class="text-danger"><strong>❌ Error:</strong> ${data.message}.</span>`;

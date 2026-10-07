@@ -76,8 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#" id="link-funciones_ejecutivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Funciones Ejecutivas</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Adicional Grado</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
+                                    <li><a href="#" id="link-adicional_grado"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Adicional Grado</a></li>
+                                    <li><a href="#" id="link-unidades_retributivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
@@ -239,6 +239,16 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/funciones_ejecutivas/funciones_ejecutivas.html");
   });
 
+  document.getElementById("link-adicional_grado")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/adicional_grado/adicional_grado.html");
+  });
+
+  document.getElementById("link-unidades_retributivas")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/unidades_retributivas/unidades_retributivas.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -301,6 +311,14 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (viewPath.includes("funciones_ejecutivas")) {
         loadDashboardScript(window.VIEWS_PATH + "/funciones_ejecutivas/funciones_ejecutivas.js");
       }
+      else if (viewPath.includes("adicional_grado")) {
+        loadDashboardScript(window.VIEWS_PATH + "/adicional_grado/adicional_grado.js");
+      }
+      else if (viewPath.includes("unidades_retributivas")) {
+        loadDashboardScript(window.VIEWS_PATH + "/unidades_retributivas/unidades_retributivas.js");
+      }
+
+
 
 
       setTimeout(() => {

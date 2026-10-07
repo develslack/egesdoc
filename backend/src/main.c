@@ -12,6 +12,7 @@
 #include "bussiness/roles_service.h"
 #include "bussiness/funciones_ejecutivas_service.h"
 #include "bussiness/adicional_grado_service.h"
+#include "bussiness/unidades_retributivas_service.h"
 
 
 
@@ -54,6 +55,11 @@ int main() {
     ArrayList* alist_adicional_grado = al_newArrayList();
     adicional_grado_init_cache(alist_adicional_grado);
     adicional_grado_load_storage(alist_adicional_grado);
+
+    // UNIDADES RETRIBUTIVAS
+    ArrayList* alist_unidades_retributivas = al_newArrayList();
+    unidades_retributivas_init_cache(alist_unidades_retributivas);
+    unidades_retributivas_load_storage(alist_unidades_retributivas);
 
 
 
