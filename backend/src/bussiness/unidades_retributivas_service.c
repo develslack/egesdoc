@@ -87,11 +87,9 @@ static int sp_insertar_unidades_retributivas(const char* nivel, const char* grad
 // ===================================================================================================================================== //
 
 
-static int sp_editar_unidades_retributivas(int id, const char* nivel, const char* grado, const char* sueldo_ur, const char* dedicacion_funcional_ur, const char* total_ur) {
+static int sp_editar_unidades_retributivas(int id, const char* nivel, const char* grado, int sueldo_ur, int dedicacion_funcional_ur, int total_ur) {
     MYSQL_STMT *stmt;
     MYSQL_BIND bind_param[6];
-    MYSQL_BIND bind_result[1];
-    int nuevo_id = 0;
     const char *query = "CALL sp_editar_unidades_retributivas(?, ?, ?, ?, ?, ?)";
 
     MYSQL *conn = connect_db();
@@ -106,7 +104,7 @@ static int sp_editar_unidades_retributivas(int id, const char* nivel, const char
 
     memset(bind_param, 0, sizeof(bind_param));
 
-    bind_param[0].buffer_type = MYSQL_TYPE_STRING;
+    bind_param[0].buffer_type = MYSQL_TYPE_LONG;
     bind_param[0].buffer = (void *)&id;
     bind_param[0].is_unsigned = 0;
 
@@ -118,17 +116,17 @@ static int sp_editar_unidades_retributivas(int id, const char* nivel, const char
     bind_param[2].buffer = (char *)grado;
     bind_param[2].buffer_length = strlen(grado);
 
-    bind_param[3].buffer_type = MYSQL_TYPE_STRING;
-    bind_param[3].buffer = (char *)sueldo_ur;
-    bind_param[3].buffer_length = strlen(sueldo_ur);
+    bind_param[3].buffer_type = MYSQL_TYPE_LONG;
+    bind_param[3].buffer = (void *)&sueldo_ur;
+    bind_param[3].is_unsigned = 0;
 
-    bind_param[4].buffer_type = MYSQL_TYPE_STRING;
-    bind_param[4].buffer = (char *)dedicacion_funcional_ur;
-    bind_param[4].buffer_length = strlen(dedicacion_funcional_ur);
+    bind_param[4].buffer_type = MYSQL_TYPE_LONG;
+    bind_param[4].buffer = (void *)&dedicacion_funcional_ur;
+    bind_param[4].is_unsigned = 0;
 
-    bind_param[5].buffer_type = MYSQL_TYPE_STRING;
-    bind_param[5].buffer = (char *)total_ur;
-    bind_param[5].buffer_length = strlen(total_ur);
+    bind_param[5].buffer_type = MYSQL_TYPE_LONG;
+    bind_param[5].buffer = (void *)&total_ur;
+    bind_param[5].is_unsigned = 0;
 
 
     if (mysql_stmt_bind_param(stmt, bind_param) || mysql_stmt_execute(stmt)) {
@@ -358,7 +356,7 @@ int unidades_retributivas_service_edit(const char *body, char *error_msg, int er
     get_unidades_retributivas_value(body, "sueldo_ur", sueldo_ur, sizeof(sueldo_ur));
     url_decode(d_sueldo_ur, sueldo_ur);
 
-    get_unidades_retributivas_value(body, "dedicacion_funcional_ur", dedicacion_funcional_ur, sizeof(d_dedicacion_funcional_ur));
+    get_unidades_retributivas_value(body, "dedicacion_funcional_ur", dedicacion_funcional_ur, sizeof(dedicacion_funcional_ur));
     url_decode(d_dedicacion_funcional_ur, dedicacion_funcional_ur);
 
     get_unidades_retributivas_value(body, "total_ur", total_ur, sizeof(total_ur));
@@ -386,7 +384,7 @@ int unidades_retributivas_service_edit(const char *body, char *error_msg, int er
 
     // 3. ACTUALIZAR EN BASE DE DATOS (Blindado)
     // CORRECCIÓN 2: Se pasa d_dedicacion_funcional_ur en lugar de dedicacion_funcional_ur
-    if (sp_editar_unidades_retributivas(id_a_editar, d_nivel, d_grado, d_sueldo_ur, d_dedicacion_funcional_ur, d_total_ur) == 0) {
+    if (sp_editar_unidades_retributivas(id_a_editar, d_nivel, d_grado, atoi(d_sueldo_ur), atoi(d_dedicacion_funcional_ur), atoi(d_total_ur)) == 0) {
         snprintf(error_msg, error_size, "Error al actualizar en la base de datos.");
         return 0;
     }

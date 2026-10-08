@@ -83,13 +83,6 @@ backend/src/bussiness/users_service.c:441:14: aviso: se define ‘json_escape’
 backend/src/bussiness/users_service.c:426:13: aviso: se define ‘append_str’ pero no se usa [-Wunused-function]
   426 | static void append_str(char **dest, size_t *size, const char *src) {
       |             ^~~~~~~~~~
-backend/src/bussiness/unidades_retributivas_service.c: En la función ‘sp_editar_unidades_retributivas’:
-backend/src/bussiness/unidades_retributivas_service.c:94:9: aviso: variable ‘nuevo_id’ sin usar [-Wunused-variable]
-   94 |     int nuevo_id = 0;
-      |         ^~~~~~~~
-backend/src/bussiness/unidades_retributivas_service.c:93:16: aviso: variable ‘bind_result’ sin usar [-Wunused-variable]
-   93 |     MYSQL_BIND bind_result[1];
-      |                ^~~~~~~~~~~
 En el fichero incluido desde backend/src/main.c:10:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    24 | static void trim_string(char *str);

@@ -20,7 +20,7 @@ CREATE PROCEDURE sp_editar_unidades_retributivas(
     IN p_nivel VARCHAR(1),
     IN p_grado VARCHAR(2),
     IN p_sueldo_ur INT,
-    IN p_dedicacion_funcioal_ur INT,
+    IN p_dedicacion_funcional_ur INT,
     IN p_total_ur INT
 )
 BEGIN
