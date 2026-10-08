@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <li><a href="#" id="link-adicional_grado"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Adicional Grado</a></li>
                                     <li><a href="#" id="link-unidades_retributivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
                                     <li><a href="#" id="link-tipo_organismo"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
+                                    <li><a href="#" id="link-tipo_norma"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Representación</a></li>
@@ -254,6 +254,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/tipo_organismo/tipo_organismo.html");
   });
 
+  document.getElementById("link-tipo_norma")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/tipo_norma/tipo_norma.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -324,6 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("tipo_organismo")) {
         loadDashboardScript(window.VIEWS_PATH + "/tipo_organismo/tipo_organismo.js");
+      }
+      else if (viewPath.includes("tipo_norma")) {
+        loadDashboardScript(window.VIEWS_PATH + "/tipo_norma/tipo_norma.js");
       }
 
 

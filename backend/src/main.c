@@ -14,6 +14,7 @@
 #include "bussiness/adicional_grado_service.h"
 #include "bussiness/unidades_retributivas_service.h"
 #include "bussiness/tipo_organismo_service.h"
+#include "bussiness/tipo_norma_service.h"
 
 
 
@@ -66,6 +67,11 @@ int main() {
     ArrayList* alist_tipo_organismo = al_newArrayList();
     tipo_organismo_init_cache(alist_tipo_organismo);
     tipo_organismo_load_storage(alist_tipo_organismo);
+
+    // TIPO NORMA
+    ArrayList* alist_tipo_norma = al_newArrayList();
+    tipo_norma_init_cache(alist_tipo_norma);
+    tipo_norma_load_storage(alist_tipo_norma);
 
 
 
