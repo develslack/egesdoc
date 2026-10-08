@@ -13,6 +13,7 @@
 #include "bussiness/funciones_ejecutivas_service.h"
 #include "bussiness/adicional_grado_service.h"
 #include "bussiness/unidades_retributivas_service.h"
+#include "bussiness/tipo_organismo_service.h"
 
 
 
@@ -60,6 +61,11 @@ int main() {
     ArrayList* alist_unidades_retributivas = al_newArrayList();
     unidades_retributivas_init_cache(alist_unidades_retributivas);
     unidades_retributivas_load_storage(alist_unidades_retributivas);
+
+    // TIPO ORGANISMO
+    ArrayList* alist_tipo_organismo = al_newArrayList();
+    tipo_organismo_init_cache(alist_tipo_organismo);
+    tipo_organismo_load_storage(alist_tipo_organismo);
 
 
 

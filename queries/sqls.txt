@@ -175,8 +175,7 @@ total_ur int(11) not null
 create table tipo_organismo(
 id int(11) auto_increment primary key,
 cod_organismo varchar(2) not null,
-descripcion varchar(120) not null,
-ubicacion_fisica varchar(120) not null
+descripcion varchar(120) not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

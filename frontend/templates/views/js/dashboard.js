@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <li><a href="#" id="link-funciones_ejecutivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Funciones Ejecutivas</a></li>
                                     <li><a href="#" id="link-adicional_grado"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Adicional Grado</a></li>
                                     <li><a href="#" id="link-unidades_retributivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
+                                    <li><a href="#" id="link-tipo_organismo"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
@@ -249,6 +249,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/unidades_retributivas/unidades_retributivas.html");
   });
 
+  document.getElementById("link-tipo_organismo")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/tipo_organismo/tipo_organismo.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -316,6 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("unidades_retributivas")) {
         loadDashboardScript(window.VIEWS_PATH + "/unidades_retributivas/unidades_retributivas.js");
+      }
+      else if (viewPath.includes("tipo_organismo")) {
+        loadDashboardScript(window.VIEWS_PATH + "/tipo_organismo/tipo_organismo.js");
       }
 
 

@@ -12,6 +12,7 @@
 #include "../bussiness/funciones_ejecutivas_service.h"
 #include "../bussiness/adicional_grado_service.h"
 #include "../bussiness/unidades_retributivas_service.h"
+#include "../bussiness/tipo_organismo_service.h"
 #include "session_manager.h"
 
 
@@ -138,6 +139,7 @@ void init_routes() {
     init_funciones_ejecutivas_routes();
     init_adicional_grado_routes();
     init_unidades_retributivas_routes();
+    init_tipo_organismo_routes();
     init_session_routes();
 
     // 🔥 EJECUTAMOS EL REPORTE: Una vez que todos los módulos se registraron, volcamos el estado
