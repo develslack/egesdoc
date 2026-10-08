@@ -15,6 +15,7 @@
 #include "bussiness/unidades_retributivas_service.h"
 #include "bussiness/tipo_organismo_service.h"
 #include "bussiness/tipo_norma_service.h"
+#include "bussiness/ambito_norma_service.h"
 
 
 
@@ -72,6 +73,11 @@ int main() {
     ArrayList* alist_tipo_norma = al_newArrayList();
     tipo_norma_init_cache(alist_tipo_norma);
     tipo_norma_load_storage(alist_tipo_norma);
+
+    // AMBITO NORMA
+    ArrayList* alist_ambito_norma = al_newArrayList();
+    ambito_norma_init_cache(alist_ambito_norma);
+    ambito_norma_load_storage(alist_ambito_norma);
 
 
 

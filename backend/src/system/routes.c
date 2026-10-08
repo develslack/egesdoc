@@ -14,6 +14,7 @@
 #include "../bussiness/unidades_retributivas_service.h"
 #include "../bussiness/tipo_organismo_service.h"
 #include "../bussiness/tipo_norma_service.h"
+#include "../bussiness/ambito_norma_service.h"
 #include "session_manager.h"
 
 
@@ -142,6 +143,7 @@ void init_routes() {
     init_unidades_retributivas_routes();
     init_tipo_organismo_routes();
     init_tipo_norma_routes();
+    init_ambito_norma_routes();
     init_session_routes();
 
     // 🔥 EJECUTAMOS EL REPORTE: Una vez que todos los módulos se registraron, volcamos el estado

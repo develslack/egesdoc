@@ -82,3 +82,6 @@
 [2026-10-08 11:33:12] [INFO]: Blindaje perimetral contra señal SIGPIPE activado (Anti-Crash).
 [2026-10-08 11:33:12] [INFO]: Iniciando secuencia dinámica de reconocimiento de hardware...
 [2026-10-08 11:33:12] [SUCCESS]: HARDWARE CONFIGURADO -> Núcleos detectados: [4] | Canales de procesamiento paralelo asignados: [3]
+[2026-10-08 13:46:23] [INFO]: Blindaje perimetral contra señal SIGPIPE activado (Anti-Crash).
+[2026-10-08 13:46:23] [INFO]: Iniciando secuencia dinámica de reconocimiento de hardware...
+[2026-10-08 13:46:23] [SUCCESS]: HARDWARE CONFIGURADO -> Núcleos detectados: [4] | Canales de procesamiento paralelo asignados: [3]

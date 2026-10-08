@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <li><a href="#" id="link-unidades_retributivas"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
                                     <li><a href="#" id="link-tipo_organismo"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
                                     <li><a href="#" id="link-tipo_norma"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
+                                    <li><a href="#" id="link-ambito_norma"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Representación</a></li>
                                 </ul>
@@ -259,6 +259,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/tipo_norma/tipo_norma.html");
   });
 
+  document.getElementById("link-ambito_norma")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/ambito_norma/ambito_norma.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -332,6 +337,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("tipo_norma")) {
         loadDashboardScript(window.VIEWS_PATH + "/tipo_norma/tipo_norma.js");
+      }
+      else if (viewPath.includes("ambito_norma")) {
+        loadDashboardScript(window.VIEWS_PATH + "/ambito_norma/ambito_norma.js");
       }
 
 
