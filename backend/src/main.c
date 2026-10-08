@@ -16,6 +16,7 @@
 #include "bussiness/tipo_organismo_service.h"
 #include "bussiness/tipo_norma_service.h"
 #include "bussiness/ambito_norma_service.h"
+#include "bussiness/tipo_representacion_service.h"
 
 
 
@@ -78,6 +79,11 @@ int main() {
     ArrayList* alist_ambito_norma = al_newArrayList();
     ambito_norma_init_cache(alist_ambito_norma);
     ambito_norma_load_storage(alist_ambito_norma);
+
+    // TIPO REPRESENTACION
+    ArrayList* alist_tipo_representacion = al_newArrayList();
+    tipo_representacion_init_cache(alist_tipo_representacion);
+    tipo_representacion_load_storage(alist_tipo_representacion);
 
 
 
