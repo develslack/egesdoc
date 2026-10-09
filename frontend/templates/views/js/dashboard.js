@@ -81,8 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <li><a href="#" id="link-tipo_organismo"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Organismo</a></li>
                                     <li><a href="#" id="link-tipo_norma"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Norma</a></li>
                                     <li><a href="#" id="link-ambito_norma"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Ambito Norma</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Unidades Retributivas</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Representación</a></li>
+                                    <li><a href="#" id="link-tipo_representacion"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Tipo Representación</a></li>
+                                    <li><a href="#" id="link-organismos"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Organismos</a></li>
+                                    <li><a href="#" id="link-jurisdicciones"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Jurisdicciones</a></li>
                                 </ul>
                             </li>
 
@@ -264,6 +265,16 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/ambito_norma/ambito_norma.html");
   });
 
+  document.getElementById("link-tipo_representacion")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/tipo_representacion/tipo_representacion.html");
+  });
+
+  document.getElementById("link-organismos")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/organismos/organismos.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -340,6 +351,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("ambito_norma")) {
         loadDashboardScript(window.VIEWS_PATH + "/ambito_norma/ambito_norma.js");
+      }
+      else if (viewPath.includes("tipo_representacion")) {
+        loadDashboardScript(window.VIEWS_PATH + "/tipo_representacion/tipo_representacion.js");
+      }
+      else if (viewPath.includes("organismos")) {
+        loadDashboardScript(window.VIEWS_PATH + "/organismos/organismos.js");
       }
 
 

@@ -17,6 +17,7 @@
 #include "bussiness/tipo_norma_service.h"
 #include "bussiness/ambito_norma_service.h"
 #include "bussiness/tipo_representacion_service.h"
+#include "bussiness/organismos_service.h"
 
 
 
@@ -85,7 +86,10 @@ int main() {
     tipo_representacion_init_cache(alist_tipo_representacion);
     tipo_representacion_load_storage(alist_tipo_representacion);
 
-
+    // ORGANISMOS
+    ArrayList* alist_organismos = al_newArrayList();
+    organismos_init_cache(alist_organismos);
+    organismos_load_storage(alist_organismos);
 
     // 40. INCIALAR CACHE DE SESSION MANAGER (MODULAR)
     session_manager_init();
