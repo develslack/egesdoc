@@ -275,6 +275,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/organismos/organismos.html");
   });
 
+  document.getElementById("link-jurisdicciones")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/jurisdicciones/jurisdicciones.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -357,6 +362,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("organismos")) {
         loadDashboardScript(window.VIEWS_PATH + "/organismos/organismos.js");
+      }
+      else if (viewPath.includes("jurisdicciones")) {
+        loadDashboardScript(window.VIEWS_PATH + "/jurisdicciones/jurisdicciones.js");
       }
 
 

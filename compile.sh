@@ -27,6 +27,7 @@ gcc -Wall -g -std=gnu11  -o backend/bin/egesdoc \
     backend/src/bussiness/ambito_norma_service.h backend/src/bussiness/ambito_norma_service.c \
     backend/src/bussiness/tipo_representacion_service.h backend/src/bussiness/tipo_representacion_service.c \
     backend/src/bussiness/organismos_service.h backend/src/bussiness/organismos_service.c \
+    backend/src/bussiness/jurisdicciones_service.h backend/src/bussiness/jurisdicciones_service.c \
     backend/src/main.c \
     -lm -lpthread -lmysqlclient -lssl -lcrypto 2>&1 | tee comp_err.txt
 
