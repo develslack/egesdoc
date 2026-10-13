@@ -60,6 +60,8 @@ file_name varchar(100),
 file_path varchar(100)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+select n.*, o.descripcion from normas n left join organismos o on n.organismo = o.cod_org;
+
 # ================================================================================================ #
 
 # change to fulltext for make search
