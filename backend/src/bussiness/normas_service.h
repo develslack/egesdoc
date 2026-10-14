@@ -6,6 +6,8 @@
 #include <string.h>
 #include "../system/ArrayList.h"
 
+#define PATH_MAX 300
+
 
 typedef struct{
 
@@ -26,7 +28,7 @@ typedef struct{
 
 }Normas;
 
-Normas* newNorma();
+Normas* newNormas();
 
 void normas_init_cache(ArrayList* alistNormas);
 void normas_load_storage(ArrayList* alistNormas);

@@ -19,6 +19,7 @@
 #include "bussiness/tipo_representacion_service.h"
 #include "bussiness/organismos_service.h"
 #include "bussiness/jurisdicciones_service.h"
+#include "bussiness/normas_service.h"
 
 
 
@@ -96,6 +97,11 @@ int main() {
     ArrayList* alist_jurisdicciones = al_newArrayList();
     jurisdicciones_init_cache(alist_jurisdicciones);
     jurisdicciones_load_storage(alist_jurisdicciones);
+
+    // NORMAS
+    ArrayList* alist_normas = al_newArrayList();
+    normas_init_cache(alist_normas);
+    normas_load_storage(alist_normas);
 
     // 40. INCIALAR CACHE DE SESSION MANAGER (MODULAR)
     session_manager_init();

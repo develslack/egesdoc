@@ -1,0 +1,40 @@
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <strong>Normas</strong>
+            </div>
+        </div><hr>
+           <button type="button" class="btn btn-success btn-sm" id="add-norma-form">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Añadir Norma
+           </button><hr>
+
+
+                <table class='display compact' style='width:100%' id='normasTable'>
+                    <thead>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Nombre Norma</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Nro. Norma</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Tipo Norma</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Ambito</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Fecha Publicación</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Año Publicación</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Jurisdicción</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Código Organismo</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Organismo</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-default'>Ubicación Física</span></th>
+                        <th class='text-nowrap text-center'><span class='label label-warning'>Acciones</span></th>
+                    </thead>
+
+                        <tbody id="normasTableBody"></tbody>
+
+
+                    </table>
+                    <hr>
+
+                    <div id="alert-info-normas"></div>
+
+    </div>
+</div>
+
+<div id="contenedor-modal-maestro-normas"></div>

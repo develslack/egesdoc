@@ -5,7 +5,7 @@ echo "# ======================================================= #"
 echo "COMPILANDO APP (eGesDoc)"
 echo "# ======================================================= #"
 
-gcc -Wall -g -std=gnu11  -o backend/bin/egesdoc \
+gcc -Wall -g -std=gnu11 -o backend/bin/egesdoc \
     backend/src/system/ArrayList.h backend/src/system/ArrayList.c \
     backend/src/system/commonlib.h backend/src/system/commonlib.c \
     backend/src/system/db.h backend/src/system/db.c \
@@ -28,6 +28,7 @@ gcc -Wall -g -std=gnu11  -o backend/bin/egesdoc \
     backend/src/bussiness/tipo_representacion_service.h backend/src/bussiness/tipo_representacion_service.c \
     backend/src/bussiness/organismos_service.h backend/src/bussiness/organismos_service.c \
     backend/src/bussiness/jurisdicciones_service.h backend/src/bussiness/jurisdicciones_service.c \
+    backend/src/bussiness/normas_service.h backend/src/bussiness/normas_service.c \
     backend/src/main.c \
     -lm -lpthread -lmysqlclient -lssl -lcrypto 2>&1 | tee comp_err.txt
 

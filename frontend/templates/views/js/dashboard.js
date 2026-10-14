@@ -87,6 +87,14 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </ul>
                             </li>
 
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-th-list"></span> Normas
+                                <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="link-normas"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Listar Normas</a></li>
+                                </ul>
+                            </li>
+
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -280,6 +288,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/jurisdicciones/jurisdicciones.html");
   });
 
+  document.getElementById("link-normas")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/normas/normas.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -365,6 +378,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("jurisdicciones")) {
         loadDashboardScript(window.VIEWS_PATH + "/jurisdicciones/jurisdicciones.js");
+      }
+      else if (viewPath.includes("normas")) {
+        loadDashboardScript(window.VIEWS_PATH + "/normas/normas.js");
       }
 
 
