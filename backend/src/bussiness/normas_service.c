@@ -13,6 +13,7 @@
 #include "../system/db.h"
 #include "../system/commonlib.h"
 #include "../system/ArrayList.h"
+#include "../system/open_docs.h"
 #include "normas_service.h"
 
 static ArrayList* pListNormasLocal = NULL;
@@ -746,7 +747,12 @@ static void route_get_norma_by_id(int client, const char *body) {
     }
 }
 
+
+// ========================================================================================================================= //
+
+
 static void route_post_normas_open_doc(int client, const char *body) {
+
     char id_str[32] = {0};
     get_norma_value(body, "id", id_str, sizeof(id_str));
     int doc_id = atoi(id_str);
@@ -756,6 +762,7 @@ static void route_post_normas_open_doc(int client, const char *body) {
         return;
     }
 
+    // 1. Buscamos el registro
     Normas* targetNorma = NULL;
     if (pListNormasLocal != NULL) {
         for (int i = 0; i < pListNormasLocal->len(pListNormasLocal); i++) {
@@ -777,42 +784,12 @@ static void route_post_normas_open_doc(int client, const char *body) {
         return;
     }
 
+    // 2. Construimos la ruta absoluta del archivo físico
     char absolute_file_path[PATH_MAX] = {0};
     get_target_upload_disk_path(targetNorma->file_name, absolute_file_path, sizeof(absolute_file_path));
 
-    FILE *f = fopen(absolute_file_path, "rb");
-    if (!f) {
-        send_response(client, "404 Not Found", "application/json", "{\"error\": \"El archivo físico no se encuentra\"}");
-        return;
-    }
-
-    fseek(f, 0, SEEK_END);
-    long fsize = ftell(f);
-    fseek(f, 0, SEEK_SET);
-
-    const char *mime_type = "application/octet-stream";
-    if (strstr(targetNorma->file_name, ".pdf")) mime_type = "application/pdf";
-    else if (strstr(targetNorma->file_name, ".doc") || strstr(targetNorma->file_name, ".docx")) mime_type = "application/msword";
-    else if (strstr(targetNorma->file_name, ".txt")) mime_type = "text/plain";
-
-    char header[1024];
-    snprintf(header, sizeof(header),
-             "HTTP/1.1 200 OK\r\n"
-             "Content-Type: %s\r\n"
-             "Content-Length: %ld\r\n"
-             "Content-Disposition: inline; filename=\"%s\"\r\n"
-             "Access-Control-Allow-Origin: *\r\n"
-             "Connection: close\r\n\r\n",
-             mime_type, fsize, targetNorma->file_name);
-
-    write(client, header, strlen(header));
-
-    char buffer[8192];
-    size_t bytes_read;
-    while ((bytes_read = fread(buffer, 1, sizeof(buffer), f)) > 0) {
-        write(client, buffer, bytes_read);
-    }
-    fclose(f);
+    // 3. Delegamos todo el trabajo pesado a nuestra nueva librería central
+    serve_document(client, absolute_file_path, targetNorma->file_name);
 }
 
 // ===================================================================================================================================== //

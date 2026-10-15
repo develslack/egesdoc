@@ -17,6 +17,7 @@ gcc -Wall -g -std=gnu11 -o backend/bin/egesdoc \
     backend/src/system/backend_server.h backend/src/system/backend_server.c \
     backend/src/system/session_manager.h backend/src/system/session_manager.c \
     backend/src/system/system_struct.h backend/src/system/system_struct.c \
+    backend/src/system/open_docs.h backend/src/system/open_docs.c \
     backend/src/bussiness/users_service.h backend/src/bussiness/users_service.c \
     backend/src/bussiness/roles_service.h backend/src/bussiness/roles_service.c \
     backend/src/bussiness/funciones_ejecutivas_service.h backend/src/bussiness/funciones_ejecutivas_service.c \
@@ -29,6 +30,7 @@ gcc -Wall -g -std=gnu11 -o backend/bin/egesdoc \
     backend/src/bussiness/organismos_service.h backend/src/bussiness/organismos_service.c \
     backend/src/bussiness/jurisdicciones_service.h backend/src/bussiness/jurisdicciones_service.c \
     backend/src/bussiness/normas_service.h backend/src/bussiness/normas_service.c \
+    backend/src/bussiness/normas_vinculadas_service.h backend/src/bussiness/normas_vinculadas_service.c \
     backend/src/main.c \
     -lm -lpthread -lmysqlclient -lssl -lcrypto 2>&1 | tee comp_err.txt
 

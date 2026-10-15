@@ -19,6 +19,7 @@
 #include "../bussiness/organismos_service.h"
 #include "../bussiness/jurisdicciones_service.h"
 #include "../bussiness/normas_service.h"
+#include "../bussiness/normas_vinculadas_service.h"
 #include "session_manager.h"
 
 
@@ -152,6 +153,7 @@ void init_routes() {
     init_organismos_routes();
     init_jurisdicciones_routes();
     init_normas_routes();
+    init_normas_vinculadas_routes();
     init_session_routes();
 
     // 🔥 EJECUTAMOS EL REPORTE: Una vez que todos los módulos se registraron, volcamos el estado

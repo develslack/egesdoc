@@ -18,11 +18,11 @@ backend/src/system/users.h:9:13: aviso: ‘route_get_register’ se declaró ‘
 backend/src/system/users.h:10:13: aviso: ‘route_post_register’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    10 | static void route_post_register(int client, const char *body);
       |             ^~~~~~~~~~~~~~~~~~~
-En el fichero incluido desde backend/src/system/routes.c:22:
+En el fichero incluido desde backend/src/system/routes.c:23:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    24 | static void trim_string(char *str);
       |             ^~~~~~~~~~~
-En el fichero incluido desde backend/src/system/routes.c:22:
+En el fichero incluido desde backend/src/system/routes.c:23:
 backend/src/system/session_manager.h:52:13: aviso: ‘route_post_set_session_context’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    52 | static void route_post_set_session_context(int client, const char* body);
       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,7 +83,7 @@ backend/src/bussiness/users_service.c:441:14: aviso: se define ‘json_escape’
 backend/src/bussiness/users_service.c:426:13: aviso: se define ‘append_str’ pero no se usa [-Wunused-function]
   426 | static void append_str(char **dest, size_t *size, const char *src) {
       |             ^~~~~~~~~~
-En el fichero incluido desde backend/src/bussiness/normas_service.c:16:
+En el fichero incluido desde backend/src/bussiness/normas_service.c:17:
 backend/src/bussiness/normas_service.h:9: aviso: «PATH_MAX» redefinido
     9 | #define PATH_MAX 300
       | 
@@ -98,21 +98,38 @@ En el fichero incluido desde /usr/include/bits/local_lim.h:38,
    13 | #define PATH_MAX        4096    /* # chars in a path name including nul */
       | 
 backend/src/bussiness/normas_service.c: En la función ‘route_get_normas_list’:
-backend/src/bussiness/normas_service.c:728:260: aviso: la salida de la directiva ‘%s’ podría truncarse escribiendo hasta 6499 bytes en una región de un tamaño entre 5983 y 8006 [-Wformat-truncation=]
-  728 |             "{\"id\": %d, \"nombre_norma\": \"%s\", \"n_norma\": \"%s\", \"tipo_norma\": \"%s\", \"f_norma\": \"%s\", \"f_pub\": \"%s\", \"anio_pub\": \"%s\", \"jurisdiccion\": \"%s\", \"organismo\": \"%s\", \"ubicacion_fisica\": \"%s\", \"observaciones\": \"%s\", \"file_name\": \"%s\", \"file_path\": \"%s\", \"descripcion_organismo\": \"%s\" }%s",
+backend/src/bussiness/normas_service.c:729:260: aviso: la salida de la directiva ‘%s’ podría truncarse escribiendo hasta 6499 bytes en una región de un tamaño entre 5983 y 8006 [-Wformat-truncation=]
+  729 |             "{\"id\": %d, \"nombre_norma\": \"%s\", \"n_norma\": \"%s\", \"tipo_norma\": \"%s\", \"f_norma\": \"%s\", \"f_pub\": \"%s\", \"anio_pub\": \"%s\", \"jurisdiccion\": \"%s\", \"organismo\": \"%s\", \"ubicacion_fisica\": \"%s\", \"observaciones\": \"%s\", \"file_name\": \"%s\", \"file_path\": \"%s\", \"descripcion_organismo\": \"%s\" }%s",
       |                                                                                                                                                                                                                                                                    ^~
-  729 |             oneNorma->id, nombre_limpio, oneNorma->n_norma, oneNorma->tipo_norma, oneNorma->f_norma, oneNorma->f_pub, oneNorma->anio_pub, oneNorma->jurisdiccion, oneNorma->organismo, oneNorma->unidad_fisica, obs_limpias, oneNorma->file_name, oneNorma->file_path, oneNorma->descripcion_organismo, (i < total_registros - 1) ? "," : "");
+  730 |             oneNorma->id, nombre_limpio, oneNorma->n_norma, oneNorma->tipo_norma, oneNorma->f_norma, oneNorma->f_pub, oneNorma->anio_pub, oneNorma->jurisdiccion, oneNorma->organismo, oneNorma->unidad_fisica, obs_limpias, oneNorma->file_name, oneNorma->file_path, oneNorma->descripcion_organismo, (i < total_registros - 1) ? "," : "");
       |                                                                                                                                                                                                                 ~~~~~~~~~~~                                         
-backend/src/bussiness/normas_service.c:727:9: nota: ‘snprintf’ manda 253 o más bytes (se asume 9064) a un destino de tamaño 8192
-  727 |         snprintf(item, sizeof(item),
+backend/src/bussiness/normas_service.c:728:9: nota: ‘snprintf’ manda 253 o más bytes (se asume 9064) a un destino de tamaño 8192
+  728 |         snprintf(item, sizeof(item),
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  728 |             "{\"id\": %d, \"nombre_norma\": \"%s\", \"n_norma\": \"%s\", \"tipo_norma\": \"%s\", \"f_norma\": \"%s\", \"f_pub\": \"%s\", \"anio_pub\": \"%s\", \"jurisdiccion\": \"%s\", \"organismo\": \"%s\", \"ubicacion_fisica\": \"%s\", \"observaciones\": \"%s\", \"file_name\": \"%s\", \"file_path\": \"%s\", \"descripcion_organismo\": \"%s\" }%s",
+  729 |             "{\"id\": %d, \"nombre_norma\": \"%s\", \"n_norma\": \"%s\", \"tipo_norma\": \"%s\", \"f_norma\": \"%s\", \"f_pub\": \"%s\", \"anio_pub\": \"%s\", \"jurisdiccion\": \"%s\", \"organismo\": \"%s\", \"ubicacion_fisica\": \"%s\", \"observaciones\": \"%s\", \"file_name\": \"%s\", \"file_path\": \"%s\", \"descripcion_organismo\": \"%s\" }%s",
       |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  729 |             oneNorma->id, nombre_limpio, oneNorma->n_norma, oneNorma->tipo_norma, oneNorma->f_norma, oneNorma->f_pub, oneNorma->anio_pub, oneNorma->jurisdiccion, oneNorma->organismo, oneNorma->unidad_fisica, obs_limpias, oneNorma->file_name, oneNorma->file_path, oneNorma->descripcion_organismo, (i < total_registros - 1) ? "," : "");
+  730 |             oneNorma->id, nombre_limpio, oneNorma->n_norma, oneNorma->tipo_norma, oneNorma->f_norma, oneNorma->f_pub, oneNorma->anio_pub, oneNorma->jurisdiccion, oneNorma->organismo, oneNorma->unidad_fisica, obs_limpias, oneNorma->file_name, oneNorma->file_path, oneNorma->descripcion_organismo, (i < total_registros - 1) ? "," : "");
       |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 En el nivel principal:
-backend/src/bussiness/normas_service.c:25:14: aviso: se define ‘base64_encode’ pero no se usa [-Wunused-function]
-   25 | static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
+backend/src/bussiness/normas_service.c:26:14: aviso: se define ‘base64_encode’ pero no se usa [-Wunused-function]
+   26 | static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
+      |              ^~~~~~~~~~~~~
+En el fichero incluido desde backend/src/bussiness/normas_vinculadas_service.c:16:
+backend/src/bussiness/normas_vinculadas_service.h:9: aviso: «PATH_MAX» redefinido
+    9 | #define PATH_MAX 300
+      | 
+En el fichero incluido desde /usr/include/bits/local_lim.h:38,
+                 desde /usr/include/bits/posix1_lim.h:161,
+                 desde /usr/include/limits.h:195,
+                 desde /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/include-fixed/limits.h:203,
+                 desde /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/include-fixed/syslimits.h:7,
+                 desde /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/include-fixed/limits.h:34,
+                 desde backend/src/bussiness/normas_vinculadas_service.c:7:
+/usr/include/linux/limits.h:13: nota: esta es la ubicación de la definición previa
+   13 | #define PATH_MAX        4096    /* # chars in a path name including nul */
+      | 
+backend/src/bussiness/normas_vinculadas_service.c:32:14: aviso: se define ‘base64_encode’ pero no se usa [-Wunused-function]
+   32 | static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
       |              ^~~~~~~~~~~~~
 En el fichero incluido desde backend/src/main.c:10:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
