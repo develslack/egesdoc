@@ -7,27 +7,20 @@
 #include <limits.h>
 #include <libgen.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include <math.h>
 #include "../system/hash.h"
 #include "../system/routes.h"
 #include "../system/db.h"
 #include "../system/commonlib.h"
 #include "../system/ArrayList.h"
+#include "../system/open_docs.h"
 #include "normas_vinculadas_service.h"
-
-// ===================================================================================================================================== //
 
 // Variable estática para la memoria local del módulo
 static ArrayList* pListNormasVinculadasLocal = NULL;
 
-
-// ===================================================================================================================================== //
-// Codificador y Decodificador Base64 (Universal)
-// ===================================================================================================================================== //
-
 static const char b64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-// ===================================================================================================================================== //
 
 static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
     *output_length = 4 * ((input_length + 2) / 3);
@@ -48,10 +41,6 @@ static char *base64_encode(const unsigned char *data, size_t input_length, size_
     encoded_data[*output_length] = '\0';
     return encoded_data;
 }
-
-
-// ===================================================================================================================================== //
-
 
 static unsigned char *base64_decode(const char *data, size_t input_length, size_t *output_length) {
     if (input_length % 4 != 0) return NULL;
@@ -87,10 +76,7 @@ static unsigned char *base64_decode(const char *data, size_t input_length, size_
     return decoded_data;
 }
 
-// ===================================================================================================================================== //
-// Manejo Físico de Archivos Subidos
-// ===================================================================================================================================== //
-static void get_target_upload_disk_path(const char *filename, char *out_disk_path, size_t max_len) {
+static void get_target_upload_disk_path(const char *rel_or_name, char *out_disk_path, size_t max_len) {
     char exe_path[PATH_MAX];
     ssize_t count = readlink("/proc/self/exe", exe_path, PATH_MAX);
 
@@ -99,22 +85,18 @@ static void get_target_upload_disk_path(const char *filename, char *out_disk_pat
         char *exe_dir = dirname(exe_path);
 
         char temp_dir[PATH_MAX];
-        snprintf(temp_dir, sizeof(temp_dir), "%s/../../documentos", exe_dir);
+        snprintf(temp_dir, sizeof(temp_dir), "%s/../../documentos/%s", exe_dir, rel_or_name);
 
         char resolved_dir[PATH_MAX];
         if (realpath(temp_dir, resolved_dir) != NULL) {
-            snprintf(out_disk_path, max_len, "%s/%s", resolved_dir, filename);
+            snprintf(out_disk_path, max_len, "%s", resolved_dir);
         } else {
-            snprintf(out_disk_path, max_len, "%s/%s", temp_dir, filename);
+            snprintf(out_disk_path, max_len, "%s", temp_dir);
         }
     } else {
-        snprintf(out_disk_path, max_len, "../../documentos/%s", filename);
+        snprintf(out_disk_path, max_len, "../../documentos/%s", rel_or_name);
     }
 }
-
-
-// ===================================================================================================================================== //
-
 
 static int save_upload_file(const char *target_path, const char *b64_content) {
     if (!target_path || strlen(target_path) == 0 || !b64_content || strlen(b64_content) == 0) {
@@ -135,7 +117,7 @@ static int save_upload_file(const char *target_path, const char *b64_content) {
     FILE *f = fopen(target_path, "wb");
     if (!f) {
         free(decoded);
-        printf("🚨 [UPLOADS] No se pudo abrir para escritura: %s\n", target_path);
+        printf("🚨 [DOCUMENTOS] No se pudo abrir para escritura: %s\n", target_path);
         return 0;
     }
 
@@ -143,16 +125,11 @@ static int save_upload_file(const char *target_path, const char *b64_content) {
     fclose(f);
     free(decoded);
 
-    printf("📄 [UPLOADS] Archivo guardado físicamente en: %s (%zu bytes)\n", target_path, out_len);
+    printf("📄 [DOCUMENTOS] Archivo guardado físicamente en: %s (%zu bytes)\n", target_path, out_len);
     return 1;
 }
 
-
-// ===================================================================================================================================== //
-// 🔒 STORED PROCEDURES: Prepared Statements (NORMAS VINCULADAS)
-// ===================================================================================================================================== //
 static int sp_insertar_norma_vinculada(int id_norma_principal, const char* path_name) {
-
     MYSQL_STMT *stmt;
     MYSQL_BIND bind_param[2];
     MYSQL_BIND bind_result[1];
@@ -169,7 +146,6 @@ static int sp_insertar_norma_vinculada(int id_norma_principal, const char* path_
         return 0;
     }
 
-    // PONEMOS EN CERO EL OBJETO COMPLETO
     memset(bind_param, 0, sizeof(bind_param));
 
     bind_param[0].buffer_type = MYSQL_TYPE_LONG;
@@ -205,69 +181,37 @@ static int sp_insertar_norma_vinculada(int id_norma_principal, const char* path_
     return nuevo_id;
 }
 
-
-// ===================================================================================================================================== //
-
-
-// ===================================================================================================================================== //
-// CONSTRUCTOR
-// ===================================================================================================================================== //
 NormasVinculadas* newNormasVinculadas(){
-
     NormasVinculadas* nNormaVinculada = (NormasVinculadas*)malloc(sizeof(NormasVinculadas));
-
     if(nNormaVinculada != NULL){
         memset(nNormaVinculada, 0, sizeof(NormasVinculadas));
     }
-
     return nNormaVinculada;
+}
 
-} // END OF FUNCTION
-
-
-// ===================================================================================================================================== //
-
-// ===================================================================================================================================== //
-// Iniciliacion de cache
-// ===================================================================================================================================== //
 void normas_vinculadas_init_cache(ArrayList* alistNormasVinculadas) {
-
     if(alistNormasVinculadas != NULL) {
-        // 2. ASIGNACIÓN CRÍTICA: Aquí guardamos la dirección de memoria que viene del main
         pListNormasVinculadasLocal = alistNormasVinculadas;
         printf("===================================================================================\n");
         printf("✅ Negociando espacio en memoria para el servicio de [ NORMAS VINCULADAS ].\n");
     } else {
-        printf("===================================================================================\n");
         printf("⚠️ Advertencia: Se intentó inicializar la caché de [ NORMAS VINCULADAS ] con NULL.\n");
     }
-} // END OF FUNCTION
+}
 
-
-
-// ===================================================================================================================================== //
-
-
-// ===================================================================================================================================== //
-// cargar datos de permisos en ArrayList
-// ===================================================================================================================================== //
 void normas_vinculadas_load_storage(ArrayList* alistNormasVinculadas) {
-
     if(alistNormasVinculadas == NULL) return;
 
-    // Ajusta la query a tus necesidades
     DBResult *res = db_query("SELECT * FROM normas_vinculadas");
     if (!res) return;
 
     MYSQL_ROW row;
     while ((row = mysql_fetch_row(res))) {
-
         NormasVinculadas* nNormaVinculada = newNormasVinculadas();
-
         if (nNormaVinculada != NULL) {
             nNormaVinculada->id = atoi(row[0]);
             nNormaVinculada->id_norma_principal = atoi(row[1]);
-            strncpy(nNormaVinculada->path_name, row[2], sizeof(nNormaVinculada->path_name) -1);
+            strncpy(nNormaVinculada->path_name, row[2] ? row[2] : "", sizeof(nNormaVinculada->path_name) - 1);
 
             alistNormasVinculadas->add(alistNormasVinculadas, nNormaVinculada);
         }
@@ -276,15 +220,9 @@ void normas_vinculadas_load_storage(ArrayList* alistNormasVinculadas) {
     db_free_result(res);
     printf("===================================================================================\n");
     printf("📊 Memoria: %d NORMA VINCULADAS cargadas. Espacio reservado: %d slots.\n", alistNormasVinculadas->len(alistNormasVinculadas), alistNormasVinculadas->reservedSize);
+}
 
-} // END OF FUNCTION
-
-
-// ===================================================================================================================================== //
-// función auxiliar: obtiene valor de key=valor en el body
-// ===================================================================================================================================== //
 static void get_norma_vinculada_value(const char *body, const char *key, char *out, size_t out_size) {
-
     char *pos = strstr(body, key);
     if (!pos) {
         out[0] = '\0';
@@ -297,12 +235,7 @@ static void get_norma_vinculada_value(const char *body, const char *key, char *o
     if (len >= out_size) len = out_size - 1;
     strncpy(out, pos, len);
     out[len] = '\0';
-
-} // END OF FUNCTION
-
-
-// ===================================================================================================================================== //
-
+}
 
 static char *get_dynamic_value(const char *body, const char *key) {
     char *pos = strstr(body, key);
@@ -319,10 +252,6 @@ static char *get_dynamic_value(const char *body, const char *key) {
     return out;
 }
 
-
-// ===================================================================================================================================== //
-// función auxiliar: Escapa caracteres especiales para el JSON extendido
-// ===================================================================================================================================== //
 static void json_escape_string_extendido(const char *src, char *dest, size_t max_len) {
     size_t j = 0;
     for (size_t i = 0; src[i] != '\0' && j < max_len - 2; i++) {
@@ -340,12 +269,8 @@ static void json_escape_string_extendido(const char *src, char *dest, size_t max
     dest[j] = '\0';
 }
 
-// ===================================================================================================================================== //
-// LOGICA DE CONSULTA: INFORMACIÓN EXTENDIDA (SQL UNIFICADO CON LEFT JOIN)
-// ===================================================================================================================================== //
 int get_informacion_extendida_service(const char *body, char *json_out, int out_size) {
     char id_str[16] = {0};
-    // Extraemos el ID de la norma que llega en el body
     get_norma_vinculada_value(body, "id", id_str, sizeof(id_str));
 
     if (strlen(id_str) == 0) {
@@ -354,7 +279,6 @@ int get_informacion_extendida_service(const char *body, char *json_out, int out_
     }
 
     char query[1024];
-    // Ejecutamos el SQL unificado que reemplaza las múltiples consultas PHP
     snprintf(query, sizeof(query),
              "SELECT n.id, n.nombre_norma, n.n_norma, n.tipo_norma, n.f_norma, "
              "n.f_pub, n.anio_pub, n.jurisdiccion, n.organismo, n.unidad_fisica, "
@@ -374,7 +298,6 @@ int get_informacion_extendida_service(const char *body, char *json_out, int out_
         return 0;
     }
 
-    // Buffers limpios para evitar caracteres de control en el JSON
     char obs_limpias[3500] = {0};
     char nombre_limpio[600] = {0};
     char org_desc_limpia[600] = {0};
@@ -385,7 +308,6 @@ int get_informacion_extendida_service(const char *body, char *json_out, int out_
     json_escape_string_extendido(row[14] ? row[14] : "", org_desc_limpia, sizeof(org_desc_limpia));
     json_escape_string_extendido(row[15] ? row[15] : "", jur_desc_limpia, sizeof(jur_desc_limpia));
 
-    // Construcción del objeto JSON de respuesta
     snprintf(json_out, out_size,
              "{ \"id\": %s, \"nombre_norma\": \"%s\", \"n_norma\": \"%s\", \"tipo_norma\": \"%s\", \"f_norma\": \"%s\", "
              "\"f_pub\": \"%s\", \"anio_pub\": \"%s\", \"jurisdiccion_cod\": \"%s\", \"organismo_cod\": \"%s\", "
@@ -412,31 +334,49 @@ int get_informacion_extendida_service(const char *body, char *json_out, int out_
     return 1;
 }
 
-
-// ===================================================================================================================================== //
-// FUNCION PARA REGISTRAR NUEVA NORMA
-// ===================================================================================================================================== //
 int normas_vinculadas_service_register(const char *body, char *error_msg, int error_size) {
-    // 🔹 CORRECCIÓN CRÍTICA: Se inicializan todos los arrays a ceros {0} para evitar arrastrar basura
-    char id_norma_principal[11];
-    char file_name[101] = {0};    char d_file_name[101] = {0};
-    char d_name_path[PATH_MAX] = {0};
+    char id_norma_principal[11] = {0};
+    char file_name[101] = {0};
+    char d_file_name[101] = {0};
+    char carpeta_norma[150] = {0};
+    char d_carpeta_norma[150] = {0};
+    char target_dir[PATH_MAX] = {0};
+    char target_file_path[PATH_MAX] = {0};
+    char db_path[PATH_MAX] = {0};
 
     get_norma_vinculada_value(body, "id_norma_principal", id_norma_principal, sizeof(id_norma_principal));
-
     int id_norma = atoi(id_norma_principal);
 
-    get_norma_vinculada_value(body, "file_name", file_name, sizeof(file_name));       url_decode(d_file_name, file_name);
+    get_norma_vinculada_value(body, "carpeta_norma", carpeta_norma, sizeof(carpeta_norma));
+    url_decode(d_carpeta_norma, carpeta_norma);
 
-    get_target_upload_disk_path(d_file_name, d_name_path, sizeof(d_name_path));
+    get_norma_vinculada_value(body, "file_name", file_name, sizeof(file_name));
+    url_decode(d_file_name, file_name);
 
-    if (strlen(d_file_name) == 0){
-        snprintf(error_msg, error_size, "Hay Campos sin Completar.");
+    if (id_norma <= 0 || strlen(d_file_name) == 0) {
+        snprintf(error_msg, error_size, "ID o nombre de archivo inválidos.");
         return 0;
     }
 
-    char *file_data_url = get_dynamic_value(body, "file_data");
+    if (strlen(d_carpeta_norma) == 0) {
+        snprintf(d_carpeta_norma, sizeof(d_carpeta_norma), "norma_%d", id_norma);
+    }
 
+    // Resolver ruta absoluta del directorio destino en documentos/
+    char rel_dir[256];
+    snprintf(rel_dir, sizeof(rel_dir), "%s", d_carpeta_norma);
+    get_target_upload_disk_path(rel_dir, target_dir, sizeof(target_dir));
+
+    // Crear la carpeta física si aún no existe
+    struct stat st = {0};
+    if (stat(target_dir, &st) == -1) {
+        mkdir(target_dir, 0755);
+    }
+
+    snprintf(target_file_path, sizeof(target_file_path), "%s/%s", target_dir, d_file_name);
+    snprintf(db_path, sizeof(db_path), "../../documentos/%s/%s", d_carpeta_norma, d_file_name);
+
+    char *file_data_url = get_dynamic_value(body, "file_data");
     if (file_data_url != NULL) {
         char *d_file_data = (char *)malloc(strlen(file_data_url) + 1);
         if (!d_file_data) {
@@ -446,36 +386,27 @@ int normas_vinculadas_service_register(const char *body, char *error_msg, int er
         }
 
         url_decode(d_file_data, file_data_url);
-        if (!save_upload_file(d_name_path, d_file_data)) {
+        if (!save_upload_file(target_file_path, d_file_data)) {
             snprintf(error_msg, error_size, "No se pudo guardar el archivo físico en el servidor.");
-            free(d_file_data); free(file_data_url);
+            free(d_file_data);
+            free(file_data_url);
             return 0;
         }
-        free(d_file_data); free(file_data_url);
+        free(d_file_data);
+        free(file_data_url);
     } else {
         snprintf(error_msg, error_size, "No se recibió el archivo adjunto (file_data).");
         return 0;
     }
 
-    FILE *file_check = fopen(d_name_path, "r");
+    FILE *file_check = fopen(target_file_path, "r");
     if (file_check == NULL) {
         snprintf(error_msg, error_size, "Error: El archivo no se encuentra en el directorio.");
         return 0;
     }
     fclose(file_check);
 
-    if (pListNormasVinculadasLocal != NULL) {
-        for (int i = 0; i < pListNormasVinculadasLocal->len(pListNormasVinculadasLocal); i++) {
-            NormasVinculadas* nNormaVinculada = (NormasVinculadas*) pListNormasVinculadasLocal->get(pListNormasVinculadasLocal, i);
-            if (strcasecmp(nNormaVinculada->path_name, d_name_path) == 0) {
-                snprintf(error_msg, error_size, "Error: Norma Existente.");
-                return 0;
-            }
-        }
-    }
-
-    int nuevo_id = sp_insertar_norma_vinculada(id_norma, d_name_path);
-
+    int nuevo_id = sp_insertar_norma_vinculada(id_norma, db_path);
     if (nuevo_id <= 0) {
         snprintf(error_msg, error_size, "Error interno al guardar en la base de datos.");
         return 0;
@@ -486,55 +417,35 @@ int normas_vinculadas_service_register(const char *body, char *error_msg, int er
         memset(nuevaNormaVinculada, 0, sizeof(NormasVinculadas));
         nuevaNormaVinculada->id = nuevo_id;
         nuevaNormaVinculada->id_norma_principal = id_norma;
-        strncpy(nuevaNormaVinculada->path_name, d_name_path, sizeof(nuevaNormaVinculada->path_name) -1);
-
+        strncpy(nuevaNormaVinculada->path_name, db_path, sizeof(nuevaNormaVinculada->path_name) - 1);
         pListNormasVinculadasLocal->add(pListNormasVinculadasLocal, nuevaNormaVinculada);
     }
     return 1;
-
-} // END OF FUNCTION
-
+}
 
 // ===================================================================================================================================== //
-// ROUTES HANDLER
-// ===================================================================================================================================== //
-
-// ===================================================================================================================================== //
-// Handler POST para el registro
+// HANDLERS
 // ===================================================================================================================================== //
 static void route_post_norma_vinculada(int client, const char *body) {
-
     char error_msg[256];
-
     if (normas_vinculadas_service_register(body, error_msg, sizeof(error_msg))) {
-        send_response(client, "200 OK", "application/json", "{ \"status\": \"ok\", \"message\": \"Norma Vinculada creada y caché actualizada\" }");
+        send_response(client, "200 OK", "application/json", "{ \"status\": \"ok\", \"message\": \"Norma Vinculada cargada correctamente\" }");
     } else {
         char response[512];
         snprintf(response, sizeof(response), "{ \"status\": \"error\", \"message\": \"%s\" }", error_msg);
         send_response(client, "400 Bad Request", "application/json", response);
     }
+}
 
-} // END OF FUNCTION
-
-
-
-// ===================================================================================================================================== //
-// ROUTES FOR LIST
-// ===================================================================================================================================== //
 static void route_get_normas_vinculadas_list(int client, const char *body) {
-
-
-    // Ahora pListMedicosLocal ya no debería ser NULL
     if (pListNormasVinculadasLocal == NULL) {
-        printf("❌ Error crítico: pListNormasVinculadasLocal sigue siendo NULL en el handler.\n");
         send_response(client, "500 Internal Error", "application/json", "{\"error\":\"Error de vinculación de memoria\"}");
         return;
     }
 
-    // Estimamos el tamaño del JSON (aprox 150 bytes por médico)
     size_t total_registros = pListNormasVinculadasLocal->len(pListNormasVinculadasLocal);
     size_t buffer_size = (total_registros * 650) + 512;
-    char *json = (char*) calloc(1, buffer_size); // calloc limpia la memoria
+    char *json = (char*) calloc(1, buffer_size);
 
     if (json == NULL) {
         send_response(client, "500 Internal Server Error", "text/plain", "Error de memoria");
@@ -542,31 +453,19 @@ static void route_get_normas_vinculadas_list(int client, const char *body) {
     }
 
     strcpy(json, "[");
-
     for (int i = 0; i < total_registros; i++) {
-
         NormasVinculadas* oneNormaVinculada = (NormasVinculadas*) pListNormasVinculadasLocal->get(pListNormasVinculadasLocal, i);
-
         char item[600];
-
-        // Armamos el objeto JSON
         snprintf(item, sizeof(item),
-            "{\"id\": %d, \"id_norma_principal\": %d, \"path_name\": \"%s\"  }%s",
-            oneNormaVinculada->id, oneNormaVinculada->id_norma_principal, oneNormaVinculada->path_name,  (i < total_registros - 1) ? "," : "");
-
+            "{\"id\": %d, \"id_norma_principal\": %d, \"path_name\": \"%s\" }%s",
+            oneNormaVinculada->id, oneNormaVinculada->id_norma_principal, oneNormaVinculada->path_name, (i < total_registros - 1) ? "," : "");
         strcat(json, item);
     }
     strcat(json, "]");
 
     send_response(client, "200 OK", "application/json", json);
-    free(json); // Liberamos el buffer del JSON
-
-
-} // END OF FUNCTION
-
-
-// ===================================================================================================================================== //
-
+    free(json);
+}
 
 static void route_post_informacion_extendida(int client, const char *body) {
     char response_json[8192] = {0};
@@ -577,16 +476,141 @@ static void route_post_informacion_extendida(int client, const char *body) {
     }
 }
 
+// Apertura física de un archivo vinculado a través de serve_document
+static void route_post_normas_vinculadas_open_doc(int client, const char *body) {
+    char id_str[32] = {0};
+    char file_name_param[128] = {0};
+    char d_file_name_param[128] = {0};
 
+    get_norma_vinculada_value(body, "id", id_str, sizeof(id_str));
+    get_norma_vinculada_value(body, "file_name", file_name_param, sizeof(file_name_param));
+    url_decode(d_file_name_param, file_name_param);
 
+    int doc_id = atoi(id_str);
+    if (doc_id <= 0) {
+        send_response(client, "400 Bad Request", "application/json", "{\"error\": \"ID de norma vinculada inválido\"}");
+        return;
+    }
 
-// ===================================================================================================================================== //
-// INIT ALL ROUTES
-// ===================================================================================================================================== //
+    NormasVinculadas* target = NULL;
+    if (pListNormasVinculadasLocal != NULL) {
+        for (int i = 0; i < pListNormasVinculadasLocal->len(pListNormasVinculadasLocal); i++) {
+            NormasVinculadas* nv = (NormasVinculadas*) pListNormasVinculadasLocal->get(pListNormasVinculadasLocal, i);
+            if (nv->id == doc_id) {
+                target = nv;
+                break;
+            }
+        }
+    }
+
+    if (target == NULL) {
+        send_response(client, "404 Not Found", "application/json", "{\"error\": \"Registro de norma vinculada no encontrado\"}");
+        return;
+    }
+
+    char absolute_path[PATH_MAX] = {0};
+    char exe_path[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", exe_path, PATH_MAX);
+
+    if (count != -1) {
+        exe_path[count] = '\0';
+        char *exe_dir = dirname(exe_path);
+
+        if (strlen(d_file_name_param) > 0) {
+            snprintf(absolute_path, sizeof(absolute_path), "%s/%s/%s", exe_dir, target->path_name, d_file_name_param);
+        } else {
+            snprintf(absolute_path, sizeof(absolute_path), "%s/%s", exe_dir, target->path_name);
+        }
+    } else {
+        snprintf(absolute_path, sizeof(absolute_path), "%s", target->path_name);
+    }
+
+    char resolved[PATH_MAX];
+    if (realpath(absolute_path, resolved) != NULL) {
+        strncpy(absolute_path, resolved, sizeof(absolute_path) - 1);
+    }
+
+    const char *nombre_archivo_final = strlen(d_file_name_param) > 0 ? d_file_name_param : basename(absolute_path);
+    serve_document(client, absolute_path, nombre_archivo_final);
+}
+
+// Itera el directorio asignado en path_name y devuelve la lista de archivos reales en disco
+static void route_post_normas_vinculadas_listar_archivos(int client, const char *body) {
+    char id_str[32] = {0};
+    get_norma_vinculada_value(body, "id", id_str, sizeof(id_str));
+    int id_nv = atoi(id_str);
+
+    NormasVinculadas* target = NULL;
+    if (pListNormasVinculadasLocal != NULL) {
+        for (int i = 0; i < pListNormasVinculadasLocal->len(pListNormasVinculadasLocal); i++) {
+            NormasVinculadas* nv = (NormasVinculadas*) pListNormasVinculadasLocal->get(pListNormasVinculadasLocal, i);
+            if (nv->id == id_nv) {
+                target = nv;
+                break;
+            }
+        }
+    }
+
+    if (!target) {
+        send_response(client, "404 Not Found", "application/json", "{\"error\": \"Norma vinculada no encontrada\"}");
+        return;
+    }
+
+    char exe_path[PATH_MAX];
+    char dir_path[PATH_MAX] = {0};
+    ssize_t count = readlink("/proc/self/exe", exe_path, PATH_MAX);
+    if (count != -1) {
+        exe_path[count] = '\0';
+        char *exe_dir = dirname(exe_path);
+        snprintf(dir_path, sizeof(dir_path), "%s/%s", exe_dir, target->path_name);
+    } else {
+        snprintf(dir_path, sizeof(dir_path), "%s", target->path_name);
+    }
+
+    char resolved[PATH_MAX];
+    if (realpath(dir_path, resolved) != NULL) {
+        strncpy(dir_path, resolved, sizeof(dir_path) - 1);
+    }
+
+    // Si path_name apunta directamente a un archivo único
+    struct stat s;
+    if (stat(dir_path, &s) == 0 && S_ISREG(s.st_mode)) {
+        char single_json[512];
+        snprintf(single_json, sizeof(single_json), "[\"%s\"]", basename(dir_path));
+        send_response(client, "200 OK", "application/json", single_json);
+        return;
+    }
+
+    DIR *d = opendir(dir_path);
+    if (!d) {
+        send_response(client, "200 OK", "application/json", "[]");
+        return;
+    }
+
+    char *json = (char*) calloc(1, 4096);
+    strcpy(json, "[");
+    struct dirent *dir;
+    int first = 1;
+
+    while ((dir = readdir(d)) != NULL) {
+        if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) continue;
+        if (!first) strcat(json, ",");
+        first = 0;
+        strcat(json, "\"");
+        strcat(json, dir->d_name);
+        strcat(json, "\"");
+    }
+    closedir(d);
+    strcat(json, "]");
+
+    send_response(client, "200 OK", "application/json", json);
+    free(json);
+}
+
 void init_normas_vinculadas_routes() {
-
-    add_route("GET", "/normas_vinculadas/list", route_get_normas_vinculadas_list); // endpoint para listar
-    add_route("POST", "/normas_vinculadas/add", route_post_norma_vinculada); // endpoint para alta de nuevo registro
+    add_route("GET", "/normas_vinculadas/list", route_get_normas_vinculadas_list);
+    add_route("POST", "/normas_vinculadas/add", route_post_norma_vinculada);
     add_route("POST", "/normas_vinculadas/extendida", route_post_informacion_extendida);
-
-} // END OF FUNCTION
+    add_route("POST", "/normas_vinculadas/open_doc", route_post_normas_vinculadas_open_doc);
+    add_route("POST", "/normas_vinculadas/archivos", route_post_normas_vinculadas_listar_archivos);
+}

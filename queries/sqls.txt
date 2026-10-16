@@ -1,3 +1,5 @@
+show tables;
+
 # ================================================================================================ #
 
 # email data
@@ -99,6 +101,9 @@ cod_jur varchar(2) not null,
 descripcion varchar(90) not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+select * from jurisdicciones;
+
+
 
 # ================================================================================================ #
 
@@ -180,6 +185,7 @@ cod_organismo varchar(2) not null,
 descripcion varchar(120) not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+select * from organismos;
 
 # ================================================================================================ #
 
@@ -261,6 +267,7 @@ id int(11) auto_increment primary key,
 descripcion varchar(100) not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+select * from tipo_norma;
 
 # ================================================================================================ #
 
@@ -271,6 +278,7 @@ id int(11) auto_increment primary key,
 descripcion varchar(100) not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+select * from ambito_norma;
 
 # ================================================================================================ #
 
@@ -281,6 +289,8 @@ id int(11) auto_increment primary key,
 id_norma_principal int(11) not null,
 path_name varchar(100) not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+select * from normas_vinculadas;
 
 
 # ================================================================================================ #

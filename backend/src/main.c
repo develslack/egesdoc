@@ -21,6 +21,7 @@
 #include "bussiness/jurisdicciones_service.h"
 #include "bussiness/normas_service.h"
 #include "bussiness/normas_vinculadas_service.h"
+#include "bussiness/representantes_service.h"
 
 
 
@@ -108,6 +109,11 @@ int main() {
     ArrayList* alist_normas_vinculadas = al_newArrayList();
     normas_vinculadas_init_cache(alist_normas_vinculadas);
     normas_vinculadas_load_storage(alist_normas_vinculadas);
+
+    // REPRESENTANTES
+    ArrayList* alist_representantes = al_newArrayList();
+    representantes_init_cache(alist_representantes);
+    representantes_load_storage(alist_representantes);
 
     // 40. INCIALAR CACHE DE SESSION MANAGER (MODULAR)
     session_manager_init();

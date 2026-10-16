@@ -95,6 +95,17 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </ul>
                             </li>
 
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-th-list"></span> Gestión Paritarias
+                                <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="link-paritarias"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Listar Paritarias</a></li>
+                                    <li><a href="#" id="link-representantes"><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Listar Representantes</a></li>
+                                    <li><a href="#" id="link-grupos"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span> Listar Grupos</a></li>
+                                    <li><a href="#" id="link-calendario"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Calendario</a></li>
+                                </ul>
+                            </li>
+
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -293,6 +304,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardView(window.VIEWS_PATH + "/normas/normas.html");
   });
 
+  document.getElementById("link-representantes")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    loadDashboardView(window.VIEWS_PATH + "/representantes/representantes.html");
+  });
+
   // ======================================================================================================================== //
   // FUNCIÓN CENTRAL DESPACHADORA CON ADUANA PERIMETRAL
   // ======================================================================================================================== //
@@ -381,6 +397,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (viewPath.includes("normas")) {
         loadDashboardScript(window.VIEWS_PATH + "/normas/normas.js");
+      }
+      else if (viewPath.includes("representantes")) {
+        loadDashboardScript(window.VIEWS_PATH + "/representantes/representantes.js");
       }
 
 

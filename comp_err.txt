@@ -18,11 +18,11 @@ backend/src/system/users.h:9:13: aviso: ‘route_get_register’ se declaró ‘
 backend/src/system/users.h:10:13: aviso: ‘route_post_register’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    10 | static void route_post_register(int client, const char *body);
       |             ^~~~~~~~~~~~~~~~~~~
-En el fichero incluido desde backend/src/system/routes.c:23:
+En el fichero incluido desde backend/src/system/routes.c:24:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    24 | static void trim_string(char *str);
       |             ^~~~~~~~~~~
-En el fichero incluido desde backend/src/system/routes.c:23:
+En el fichero incluido desde backend/src/system/routes.c:24:
 backend/src/system/session_manager.h:52:13: aviso: ‘route_post_set_session_context’ se declaró ‘static’ pero nunca se define [-Wunused-function]
    52 | static void route_post_set_session_context(int client, const char* body);
       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,7 +114,7 @@ En el nivel principal:
 backend/src/bussiness/normas_service.c:26:14: aviso: se define ‘base64_encode’ pero no se usa [-Wunused-function]
    26 | static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
       |              ^~~~~~~~~~~~~
-En el fichero incluido desde backend/src/bussiness/normas_vinculadas_service.c:16:
+En el fichero incluido desde backend/src/bussiness/normas_vinculadas_service.c:18:
 backend/src/bussiness/normas_vinculadas_service.h:9: aviso: «PATH_MAX» redefinido
     9 | #define PATH_MAX 300
       | 
@@ -128,8 +128,16 @@ En el fichero incluido desde /usr/include/bits/local_lim.h:38,
 /usr/include/linux/limits.h:13: nota: esta es la ubicación de la definición previa
    13 | #define PATH_MAX        4096    /* # chars in a path name including nul */
       | 
-backend/src/bussiness/normas_vinculadas_service.c:32:14: aviso: se define ‘base64_encode’ pero no se usa [-Wunused-function]
-   32 | static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
+backend/src/bussiness/normas_vinculadas_service.c: En la función ‘normas_vinculadas_service_register’:
+backend/src/bussiness/normas_vinculadas_service.c:376:62: aviso: la salida de la directiva ‘%s’ podría truncarse escribiendo hasta 100 bytes en una región de un tamaño entre 0 y 299 [-Wformat-truncation=]
+  376 |     snprintf(target_file_path, sizeof(target_file_path), "%s/%s", target_dir, d_file_name);
+      |                                                              ^~               ~~~~~~~~~~~
+backend/src/bussiness/normas_vinculadas_service.c:376:5: nota: ‘snprintf’ manda entre 2 y 401 bytes a un destino de tamaño 300
+  376 |     snprintf(target_file_path, sizeof(target_file_path), "%s/%s", target_dir, d_file_name);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+En el nivel principal:
+backend/src/bussiness/normas_vinculadas_service.c:25:14: aviso: se define ‘base64_encode’ pero no se usa [-Wunused-function]
+   25 | static char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length) {
       |              ^~~~~~~~~~~~~
 En el fichero incluido desde backend/src/main.c:10:
 backend/src/system/session_manager.h:24:13: aviso: ‘trim_string’ se declaró ‘static’ pero nunca se define [-Wunused-function]
